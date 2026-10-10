@@ -41,5 +41,13 @@ jobs:
             run_episode.py \
             youtube_upload.py
 
+      - name: Vérifier les secrets
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "$ELEVENLABS_API_KEY" && echo "✅ ELEVENLABS_API_KEY présente" || { echo "❌ ELEVENLABS_API_KEY absente"; exit 1; }
+          test -n "$GEMINI_API_KEY" && echo "✅ GEMINI_API_KEY présente" || { echo "❌ GEMINI_API_KEY absente"; exit 1; }
+
       - name: Test terminé
         run: echo "✅ Dépendances et scripts Python validés sur GitHub Actions"
