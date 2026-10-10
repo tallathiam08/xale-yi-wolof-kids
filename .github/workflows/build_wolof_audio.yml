@@ -53,13 +53,24 @@ jobs:
         run: |
           test -s output/wolof_audio/manifest.json
 
-          COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
+          WAV_COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
 
-          echo "🎙️ Fichiers WAV : $COUNT"
+          MANIFEST_COUNT=$(python - <<'PY2'
+import json
 
-          test "$COUNT" -eq 60
+with open("output/wolof_audio/manifest.json", encoding="utf-8") as f:
+    data = json.load(f)
 
-          echo "✅ 60 fichiers audio Wolof générés"
+print(len(data["files"]))
+PY2
+)
+
+          echo "🎙️ Fichiers WAV : $WAV_COUNT"
+          echo "📝 Dialogues dans le manifest : $MANIFEST_COUNT"
+
+          test "$WAV_COUNT" -eq "$MANIFEST_COUNT"
+
+          echo "✅ Tous les dialogues ont leur fichier audio"
 
       - name: Conserver les audios
         uses: actions/upload-artifact@v4
