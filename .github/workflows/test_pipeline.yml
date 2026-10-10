@@ -18,9 +18,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.13'
+          cache: 'pip'
 
-      - name: Vérifier Python
-        run: python --version
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Compiler les scripts
         run: |
@@ -39,4 +42,4 @@ jobs:
             youtube_upload.py
 
       - name: Test terminé
-        run: echo "✅ Projet Python valide sur GitHub Actions"
+        run: echo "✅ Dépendances et scripts Python validés sur GitHub Actions"
