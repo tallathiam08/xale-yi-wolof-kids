@@ -45,7 +45,7 @@ jobs:
           python -m json.tool output/episode_github_generated.json > /dev/null
           echo "✅ Épisode JSON valide"
 
-      - name: Générer les 60 dialogues Wolof
+      - name: Générer les dialogues Wolof
         run: |
           python generate_wolof_audio.py
 
@@ -54,19 +54,10 @@ jobs:
           test -s output/wolof_audio/manifest.json
 
           WAV_COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
-
-          MANIFEST_COUNT=$(python - <<'PY2'
-import json
-
-with open("output/wolof_audio/manifest.json", encoding="utf-8") as f:
-    data = json.load(f)
-
-print(len(data["files"]))
-PY2
-)
+          MANIFEST_COUNT=$(python -c 'import json; print(len(json.load(open("output/wolof_audio/manifest.json", encoding="utf-8"))["files"]))')
 
           echo "🎙️ Fichiers WAV : $WAV_COUNT"
-          echo "📝 Dialogues dans le manifest : $MANIFEST_COUNT"
+          echo "📝 Dialogues manifest : $MANIFEST_COUNT"
 
           test "$WAV_COUNT" -eq "$MANIFEST_COUNT"
 
