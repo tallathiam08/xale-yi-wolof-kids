@@ -29,15 +29,35 @@ def main():
 
     print("✅ Modèle et vocodeur chargés")
 
-    embeddings_dataset = load_dataset(
-        "Matthijs/cmu-arctic-xvectors",
-        split="validation",
+    import zipfile
+    from huggingface_hub import hf_hub_download
+
+    print("📥 Téléchargement des speaker embeddings...")
+
+    zip_path = hf_hub_download(
+        repo_id="Matthijs/cmu-arctic-xvectors",
+        filename="spkrec-xvect.zip",
+        repo_type="dataset",
     )
 
-    speaker_embedding = torch.tensor(
-        embeddings_dataset[7306]["xvector"],
-        dtype=torch.float32,
-    ).unsqueeze(0)
+    with zipfile.ZipFile(zip_path) as zf:
+        names = sorted(
+            name for name in zf.namelist()
+            if name.endswith(".npy")
+        )
+
+        if len(names) <= 7306:
+            raise RuntimeError(
+                f"Nombre de speaker embeddings insuffisant : {len(names)}"
+            )
+
+        with zf.open(names[7306]) as f:
+            speaker_embedding = torch.tensor(
+                np.load(f),
+                dtype=torch.float32,
+            ).unsqueeze(0)
+
+    print("✅ Speaker embedding chargé")
 
     inputs = processor(
         text=TEXT,
