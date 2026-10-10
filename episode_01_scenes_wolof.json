@@ -1,0 +1,179 @@
+{
+  "title": "Toto dafa yéeg ci bus bu juum",
+  "language": "Wolof",
+  "target_duration": "Environ 1 minute avec le workflow actuel de 81 frames / 5 secondes par scène",
+  "scenes": [
+    {
+      "scene": 1,
+      "duration_hint": 5,
+      "prompt": "2D colorful children's cartoon, sunny morning in a Senegalese neighborhood. Samba, Awa and Ibrahima walk together toward school with Toto, a small brown puppy. Samba wears a yellow T-shirt, Awa has beautiful beaded braids, Ibrahima wears glasses. They carry small school bags. Colorful African houses, sandy street, large baobab tree, cheerful family-friendly atmosphere, expressive faces, smooth natural body motion, gentle camera tracking, consistent characters, no text, no subtitles, no logos.",
+      "dialogue": [
+        {
+          "speaker": "Samba",
+          "text": "Awa, Ibrahima, ñu dem école!"
+        },
+        {
+          "speaker": "Awa",
+          "text": "Waaw, ñu dem!"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "duration_hint": 5,
+      "prompt": "Same three children and Toto continue walking through the same bright Senegalese neighborhood. Toto playfully runs a few steps ahead, then looks toward the road. The children laugh and follow him. Warm morning sunlight, colorful houses, baobab tree in background, smooth children's cartoon animation, consistent characters, no text.",
+      "dialogue": [
+        {
+          "speaker": "Ibrahima",
+          "text": "Toto, muñal ci sunu wetu!"
+        },
+        {
+          "speaker": "Samba",
+          "text": "Ha ha, Toto dafa gaaw lool!"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "duration_hint": 5,
+      "prompt": "A colorful school bus approaches a small neighborhood stop. Samba, Awa and Ibrahima stop and smile. Toto becomes excited and runs toward the bus. Keep the same character design and clothes, bright Senegalese setting, cinematic children's animation, smooth camera movement, no text.",
+      "dialogue": [
+        {
+          "speaker": "Awa",
+          "text": "Xoolal, oto bi ñëw na!"
+        },
+        {
+          "speaker": "Samba",
+          "text": "Toto, bul daw ci bus bi!"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "duration_hint": 5,
+      "prompt": "The school bus door opens. Samba, Awa and Ibrahima board carefully while Toto jumps onto a different nearby bus by mistake. The scene is playful and clear, with two buses briefly visible. Keep the same characters, same clothing, bright family-friendly 2D cartoon style, no text or logos.",
+      "dialogue": [
+        {
+          "speaker": "Ibrahima",
+          "text": "Ñu yéeg ci bus bii!"
+        },
+        {
+          "speaker": "Awa",
+          "text": "Waaw, waaye fan la Toto?"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "duration_hint": 5,
+      "prompt": "Inside the school bus, Samba, Awa and Ibrahima sit together and suddenly notice Toto is missing. Their expressions change from happy to worried but not scared. Bright safe school bus interior, colorful seats, expressive children's faces, smooth animation, no text.",
+      "dialogue": [
+        {
+          "speaker": "Samba",
+          "text": "Toto nekkul fii!"
+        },
+        {
+          "speaker": "Awa",
+          "text": "Oh! Moom moo génn ci beneen bus!"
+        }
+      ]
+    },
+    {
+      "scene": 6,
+      "duration_hint": 5,
+      "prompt": "The children look out through the bus window and see the other bus moving away down the road. They point toward it and decide to tell the bus driver. Same characters and visual style, dynamic but smooth camera movement, colorful Senegalese street, no text.",
+      "dialogue": [
+        {
+          "speaker": "Ibrahima",
+          "text": "Bus bi mu yéeg dafa dem na!"
+        },
+        {
+          "speaker": "Samba",
+          "text": "Ñu wax ak chauffeur bi."
+        }
+      ]
+    },
+    {
+      "scene": 7,
+      "duration_hint": 5,
+      "prompt": "The three children speak to the friendly school bus driver. The driver listens carefully and points toward the next neighborhood stop. Warm safe children's cartoon atmosphere, clean facial expressions, consistent characters, no text.",
+      "dialogue": [
+        {
+          "speaker": "Awa",
+          "text": "Monsieur, sunu Toto yéeg ci beneen bus."
+        },
+        {
+          "speaker": "Ibrahima",
+          "text": "Mën na nu topp bus bi?"
+        }
+      ]
+    },
+    {
+      "scene": 8,
+      "duration_hint": 5,
+      "prompt": "At the next stop, the children get off with the driver and look around. Toto's bus is visible farther away. The children wave and start walking quickly but safely toward the next stop. Bright morning, baobab and African houses, smooth cartoon motion, no text.",
+      "dialogue": [
+        {
+          "speaker": "Samba",
+          "text": "Foofa lañu wara dem!"
+        },
+        {
+          "speaker": "Awa",
+          "text": "Ñu gaaw, waaye buñu daw!"
+        }
+      ]
+    },
+    {
+      "scene": 9,
+      "duration_hint": 5,
+      "prompt": "Toto appears inside the wrong bus, looking through the window with a confused but adorable expression. He sees the children in the distance and wags his tail. Cute family-friendly cartoon, bright colors, gentle movement, no text.",
+      "dialogue": [
+        {
+          "speaker": "Samba",
+          "text": "Toto! Nu ngi fii!"
+        },
+        {
+          "speaker": "Awa",
+          "text": "Mungi nu gis!"
+        }
+      ]
+    },
+    {
+      "scene": 10,
+      "duration_hint": 5,
+      "prompt": "The two buses stop near the same neighborhood corner. Toto carefully comes down from the wrong bus and runs happily toward Samba, Awa and Ibrahima. The children kneel and hug him. Heartwarming children's cartoon, consistent characters, sunny Senegalese neighborhood, no text.",
+      "dialogue": [
+        {
+          "speaker": "Ibrahima",
+          "text": "Toto, nu la seetoon!"
+        }
+      ]
+    },
+    {
+      "scene": 11,
+      "duration_hint": 5,
+      "prompt": "Samba, Awa and Ibrahima continue toward school with Toto walking safely beside them. They smile and point at the correct school bus. Bright cheerful colors, smooth tracking shot, same character design, no text.",
+      "dialogue": [
+        {
+          "speaker": "Awa",
+          "text": "Dinañu topp benn bus rekk léegi."
+        },
+        {
+          "speaker": "Samba",
+          "text": "Waaw! Toto, toppal nu!"
+        }
+      ]
+    },
+    {
+      "scene": 12,
+      "duration_hint": 5,
+      "prompt": "The children arrive at school with Toto. They smile at each other and enter the colorful school gate together. Final cheerful wide shot with baobab tree and sunny Senegalese environment, warm family-friendly ending, smooth camera pullback, consistent characters, no text, no logos.",
+      "dialogue": [
+        {
+          "speaker": "Ibrahima",
+          "text": "Li nu jàng: bu ñu dem, ñu xool bu baax!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "titre": "Toto daan na yoon!",
+  "scenes": [
+    {
+      "scene": 1,
+      "prompt": "2D colorful children's cartoon, sunny morning in a Senegalese neighborhood. Samba, Awa and Ibrahima walk happily toward school with Toto the small brown puppy. Colorful houses, sandy street, large baobab tree, expressive faces, smooth natural motion, gentle camera tracking, warm family-friendly atmosphere, no text, no subtitles.",
+      "dialogue": [
+        {
+          "voice": "samba",
+          "text": "Naka nga def, Awa?"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "prompt": "2D colorful children's cartoon, the same three Senegalese children and the same small brown puppy continue walking toward school. Toto suddenly stops and looks toward a different road. The children notice him and react with surprise. Consistent character appearance, smooth expressive animation, Senegalese neighborhood, warm morning light, no text, no subtitles.",
+      "dialogue": [
+        {
+          "voice": "awa",
+          "text": "Toto, fan nga dem?"
+        }
+      ]
+    }
+  ]
+}

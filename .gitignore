@@ -1,0 +1,29 @@
+# Secrets / credentials
+.env
+credentials/
+*.pem
+*.key
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Generated media
+audio/
+videos/
+images/
+thumbnails/
+output/
+
+# Temporary / test files
+test_*.json
+test_*.py
+*_backup*.py
+
+# Logs
+*.log
