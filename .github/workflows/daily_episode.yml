@@ -1,0 +1,48 @@
+name: Daily Wolof Episode
+
+on:
+  schedule:
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Générer l'épisode
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
+        run: |
+          python generate_episode_github.py
+
+      - name: Vérifier l'épisode
+        run: |
+          test -s output/episode_github_generated.json
+          python -m json.tool output/episode_github_generated.json > /dev/null
+          echo "✅ Épisode Wolof valide"
+
+      - name: Conserver l'épisode
+        uses: actions/upload-artifact@v4
+        with:
+          name: episode-wolof-${{ github.run_number }}
+          path: output/episode_github_generated.json
+          retention-days: 7
