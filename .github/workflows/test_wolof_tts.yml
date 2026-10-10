@@ -1,0 +1,45 @@
+name: Test Wolof TTS Gratuit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installer les dépendances TTS
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            torch \
+            transformers \
+            datasets \
+            soundfile \
+            sentencepiece
+
+      - name: Générer une voix Wolof
+        run: |
+          python tts_wolof_test.py
+
+      - name: Vérifier l'audio
+        run: |
+          test -s output/tts_test/wolof_test.wav
+          file output/tts_test/wolof_test.wav
+          echo "✅ AUDIO WAV VALIDE"
+
+      - name: Conserver l'audio
+        uses: actions/upload-artifact@v4
+        with:
+          name: wolof-tts-test
+          path: output/tts_test/wolof_test.wav
+          retention-days: 7
