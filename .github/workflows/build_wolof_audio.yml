@@ -1,0 +1,68 @@
+name: Build Wolof Audio
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installer les dépendances TTS
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            "transformers>=4.46.0" \
+            "torch>=2.0.0" \
+            "numpy>=1.24.0" \
+            "huggingface_hub>=0.24.0" \
+            "soundfile>=0.12.1" \
+            sentencepiece
+
+      - name: Générer un épisode 5 minutes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
+        run: |
+          python generate_episode_github.py
+
+      - name: Vérifier l'épisode
+        run: |
+          test -s output/episode_github_generated.json
+          python -m json.tool output/episode_github_generated.json > /dev/null
+          echo "✅ Épisode JSON valide"
+
+      - name: Générer les 60 dialogues Wolof
+        run: |
+          python generate_wolof_audio.py
+
+      - name: Vérifier les résultats
+        run: |
+          test -s output/wolof_audio/manifest.json
+
+          COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
+
+          echo "🎙️ Fichiers WAV : $COUNT"
+
+          test "$COUNT" -eq 60
+
+          echo "✅ 60 fichiers audio Wolof générés"
+
+      - name: Conserver les audios
+        uses: actions/upload-artifact@v4
+        with:
+          name: wolof-audio-60-dialogues-${{ github.run_number }}
+          path: output/wolof_audio/
+          retention-days: 7
