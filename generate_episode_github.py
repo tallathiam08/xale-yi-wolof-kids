@@ -8,6 +8,11 @@ from google import genai
 from pydantic import BaseModel, Field
 
 
+TOTAL_SCENES = 60
+SCENE_DURATION = 5
+TARGET_SECONDS = TOTAL_SCENES * SCENE_DURATION
+
+
 class Dialogue(BaseModel):
     speaker: Literal["Samba", "Awa", "Ibrahima"]
     text: str = Field(min_length=3, max_length=160)
@@ -33,6 +38,7 @@ def main():
         raise RuntimeError("GEMINI_API_KEY introuvable")
 
     model = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     client = genai.Client(api_key=api_key)
@@ -41,36 +47,75 @@ def main():
 Tu es le scénariste principal de la chaîne YouTube jeunesse
 « Xale Yi – Wolof Kids ».
 
-Nous faisons aujourd'hui un TEST AUTOMATISÉ le {now}.
+Nous créons un épisode entièrement automatisé le {now}.
 
-Crée un épisode COMPLET pour enfants en 12 scènes, environ 5 secondes par scène,
-soit environ 1 minute avec le workflow vidéo actuel.
+OBJECTIF TECHNIQUE :
+- durée totale : exactement 5 minutes
+- exactement {TOTAL_SCENES} scènes
+- chaque scène dure exactement {SCENE_DURATION} secondes
+- total : exactement {TARGET_SECONDS} secondes
 
 PERSONNAGES FIXES :
-- Samba : garçon
-- Awa : fille
-- Ibrahima : garçon avec lunettes
+- Samba : garçon sénégalais, t-shirt jaune, short bleu
+- Awa : fille sénégalaise, robe orange
+- Ibrahima : garçon sénégalais, lunettes rondes, polo vert, short beige
 - Toto : petit chien marron
 
-RÈGLES :
-1. L'histoire doit être nouvelle et différente des épisodes précédents.
-2. Elle doit être simple, amusante, positive et adaptée aux jeunes enfants.
-3. Le contexte culturel peut être sénégalais : école, famille, quartier, bus,
-   marché, plage, maison, parc, etc.
-4. Tous les dialogues doivent être en WOLOF.
-5. Les dialogues doivent être courts et naturels.
-6. Chaque scène contient 1 ou 2 répliques maximum.
-7. Les prompts visuels doivent être en ANGLAIS.
-8. Les prompts visuels doivent toujours conserver les mêmes personnages,
-   vêtements et style 2D cartoon pour assurer la continuité.
-9. Aucun texte, sous-titre, logo ou watermark dans les prompts visuels.
-10. Chaque scène doit faire avancer clairement l'histoire.
-11. La scène 12 doit donner une vraie conclusion avec une petite leçon positive.
-12. Ne retourne AUCUN markdown.
-13. Retourne UNIQUEMENT le JSON conforme au schéma demandé.
+STYLE VISUEL FIXE :
+- animation 2D cartoon pour enfants
+- couleurs vives
+- expressions joyeuses
+- apparence cohérente d'une scène à l'autre
+- mêmes vêtements et mêmes personnages pendant tout l'épisode
+- ambiance sénégalaise familiale et positive
 
-Le résultat doit contenir EXACTEMENT 12 scènes numérotées de 1 à 12.
-Chaque scène doit avoir duration_hint = 5.
+RÈGLES DE L'HISTOIRE :
+1. Crée UNE histoire complète, originale et amusante.
+2. L'histoire doit progresser du début jusqu'à une vraie conclusion.
+3. Les 60 scènes doivent être liées entre elles.
+4. Aucun saut brutal ou changement inexplicable de lieu.
+5. Les scènes doivent être faciles à transformer en clips vidéo séparés.
+6. Les enfants doivent pouvoir comprendre l'histoire simplement.
+7. La fin doit contenir une petite morale positive.
+8. L'histoire doit être adaptée aux enfants.
+9. Aucun contenu violent, dangereux, sexuel ou effrayant.
+10. Le contexte peut être sénégalais : école, maison, quartier, bus,
+    plage, parc, marché, famille, anniversaire, etc.
+
+DIALOGUES :
+1. Tous les dialogues doivent être en WOLOF.
+2. Maximum 2 répliques par scène.
+3. Les phrases doivent être courtes et naturelles.
+4. Les personnages doivent réellement dialoguer.
+5. Ne donne jamais une longue narration à la place des dialogues.
+6. Chaque scène doit avoir au moins 1 réplique.
+7. Répartis les dialogues naturellement entre Samba, Awa et Ibrahima.
+8. Toto ne parle pas : il agit, aboie ou réagit visuellement.
+
+PROMPTS VISUELS :
+1. Les prompts visuels doivent être en ANGLAIS.
+2. Chaque prompt doit décrire précisément l'action de la scène.
+3. Conserve strictement les personnages, vêtements et style.
+4. Décris le décor, les actions et les expressions.
+5. Pas de texte à l'écran.
+6. Pas de sous-titres.
+7. Pas de logo.
+8. Pas de watermark.
+9. Aucun changement arbitraire d'apparence des personnages.
+
+STRUCTURE :
+- Scène 1 commence l'histoire.
+- Scènes 2 à 55 développent progressivement le problème et les actions.
+- Scènes 56 à 59 résolvent le problème.
+- Scène 60 conclut l'histoire avec une petite morale positive.
+
+IMPORTANT :
+- Retourne UNIQUEMENT le JSON.
+- Aucun markdown.
+- EXACTEMENT {TOTAL_SCENES} scènes.
+- Numéros de scène exactement de 1 à {TOTAL_SCENES}.
+- Chaque duration_hint doit être exactement {SCENE_DURATION}.
+- Chaque scène doit contenir entre 1 et 2 dialogues.
 """
 
     response = client.models.generate_content(
@@ -87,12 +132,13 @@ Chaque scène doit avoir duration_hint = 5.
 
     episode = response.parsed
 
-    if len(episode.scenes) != 12:
+    if len(episode.scenes) != TOTAL_SCENES:
         raise RuntimeError(
-            f"Nombre de scènes incorrect : {len(episode.scenes)} au lieu de 12"
+            f"Nombre de scènes incorrect : {len(episode.scenes)} "
+            f"au lieu de {TOTAL_SCENES}"
         )
 
-    expected_numbers = list(range(1, 13))
+    expected_numbers = list(range(1, TOTAL_SCENES + 1))
     actual_numbers = [scene.scene for scene in episode.scenes]
 
     if actual_numbers != expected_numbers:
@@ -101,9 +147,10 @@ Chaque scène doit avoir duration_hint = 5.
         )
 
     for scene in episode.scenes:
-        if scene.duration_hint != 5:
+        if scene.duration_hint != SCENE_DURATION:
             raise RuntimeError(
-                f"Scène {scene.scene}: duration_hint doit être 5"
+                f"Scène {scene.scene}: duration_hint doit être "
+                f"{SCENE_DURATION}"
             )
 
         if not (1 <= len(scene.dialogue) <= 2):
@@ -111,20 +158,45 @@ Chaque scène doit avoir duration_hint = 5.
                 f"Scène {scene.scene}: 1 à 2 dialogues attendus"
             )
 
+        if not scene.prompt.strip():
+            raise RuntimeError(
+                f"Scène {scene.scene}: prompt visuel vide"
+            )
+
+    total_seconds = sum(
+        scene.duration_hint for scene in episode.scenes
+    )
+
+    if total_seconds != TARGET_SECONDS:
+        raise RuntimeError(
+            f"Durée incorrecte : {total_seconds}s "
+            f"au lieu de {TARGET_SECONDS}s"
+        )
+
+    episode.target_duration = "5min"
+
     output_dir = Path("output")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     output_file = output_dir / "episode_github_generated.json"
+
     output_file.write_text(
-        json.dumps(episode.model_dump(), ensure_ascii=False, indent=2),
+        json.dumps(
+            episode.model_dump(),
+            ensure_ascii=False,
+            indent=2
+        ),
         encoding="utf-8",
     )
 
-    total_dialogues = sum(len(scene.dialogue) for scene in episode.scenes)
+    total_dialogues = sum(
+        len(scene.dialogue) for scene in episode.scenes
+    )
 
-    print("✅ Épisode généré avec succès")
+    print("✅ Épisode 5 minutes généré avec succès")
     print(f"🎬 Titre : {episode.title}")
-    print(f"🎞️ Scènes : {len(episode.scenes)}/12")
+    print(f"🎞️ Scènes : {len(episode.scenes)}/{TOTAL_SCENES}")
+    print(f"⏱️ Durée : {total_seconds}s / 300s")
     print(f"🗣️ Dialogues : {total_dialogues}")
     print(f"🤖 Modèle : {model}")
     print(f"📄 Fichier : {output_file}")
