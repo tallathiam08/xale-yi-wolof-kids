@@ -20,9 +20,10 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Installer les dépendances TTS
+      - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
+          pip install -r requirements.txt
           pip install \
             "transformers>=4.46.0" \
             "torch>=2.0.0" \
