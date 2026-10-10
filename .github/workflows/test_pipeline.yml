@@ -1,0 +1,42 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Vérifier Python
+        run: python --version
+
+      - name: Compiler les scripts
+        run: |
+          python -m py_compile \
+            config.py \
+            dialogue.py \
+            episode_automation.py \
+            episode_automation_v2.py \
+            episode_generator.py \
+            generate_episode_audio.py \
+            main.py \
+            make_animatic.py \
+            pipeline.py \
+            postprocess_episode.py \
+            run_episode.py \
+            youtube_upload.py
+
+      - name: Test terminé
+        run: echo "✅ Projet Python valide sur GitHub Actions"
