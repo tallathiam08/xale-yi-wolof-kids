@@ -104,8 +104,8 @@ jobs:
         run: |
           COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
           echo "🎙️ WAV : $COUNT"
-          test "$COUNT" -ge 60
-          echo "✅ Audios ADIA prêts"
+          test "$COUNT" -eq 120
+          echo "✅ 120 audios ADIA prêts"
 
       - name: Construire l'épisode
         run: |

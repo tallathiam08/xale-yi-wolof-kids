@@ -16,11 +16,24 @@ OUTPUT_DIR = Path("output/adia_audio")
 LIMIT = int(os.getenv("ADIA_LIMIT", "3"))
 
 
-DESCRIPTION = (
-    "A warm, natural and friendly Senegalese Wolof voice, "
-    "clear pronunciation, lively rhythm, cheerful and expressive, "
-    "suitable for a children's animation."
-)
+VOICE_STYLES = {
+    "Samba": (
+        "A lively young Senegalese boy speaking natural Wolof, "
+        "warm, energetic, playful, expressive and fast, "
+        "clear pronunciation, friendly children's animation voice."
+    ),
+    "Awa": (
+        "A cheerful young Senegalese girl speaking natural Wolof, "
+        "bright, energetic, playful, expressive and fast, "
+        "clear pronunciation, friendly children's animation voice."
+    ),
+    "Ibrahima": (
+        "A cheerful young Senegalese boy speaking natural Wolof, "
+        "slightly mischievous, energetic, playful and expressive, "
+        "clear pronunciation, fast conversational rhythm, "
+        "friendly children's animation voice."
+    ),
+}
 
 
 def main():
@@ -87,10 +100,7 @@ def main():
 
     print("✅ Modèle chargé")
 
-    description_ids = tokenizer(
-        DESCRIPTION,
-        return_tensors="pt",
-    ).input_ids.to(device)
+    # Description chargée séparément pour chaque personnage.
 
     manifest = []
 
@@ -115,6 +125,16 @@ def main():
             f"/ {speaker}"
         )
         print(f"   {text}")
+
+        style = VOICE_STYLES.get(
+            speaker,
+            VOICE_STYLES["Samba"],
+        )
+
+        description_ids = tokenizer(
+            style,
+            return_tensors="pt",
+        ).input_ids.to(device)
 
         prompt_ids = tokenizer(
             text,

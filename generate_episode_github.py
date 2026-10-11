@@ -88,9 +88,14 @@ DIALOGUES :
 3. Les phrases doivent être courtes et naturelles.
 4. Les personnages doivent réellement dialoguer.
 5. Ne donne jamais une longue narration à la place des dialogues.
-6. Chaque scène doit avoir au moins 1 réplique.
+6. Chaque scène doit contenir EXACTEMENT 2 répliques.
 7. Répartis les dialogues naturellement entre Samba, Awa et Ibrahima.
 8. Toto ne parle pas : il agit, aboie ou réagit visuellement.
+9. Chaque réplique doit contenir environ 6 à 14 mots.
+10. Le deuxième personnage doit répondre rapidement au premier.
+11. Utilise des réactions amusantes et naturelles : ah!, waaw!, ehe!, déedéet!, kaay!, etc. seulement quand elles sont naturelles.
+12. Évite les longues phrases et les explications.
+13. Le rythme doit ressembler à une vraie conversation d'enfants.
 
 PROMPTS VISUELS :
 1. Les prompts visuels doivent être en ANGLAIS.
@@ -153,10 +158,19 @@ IMPORTANT :
                 f"{SCENE_DURATION}"
             )
 
-        if not (1 <= len(scene.dialogue) <= 2):
+        if len(scene.dialogue) != 2:
             raise RuntimeError(
-                f"Scène {scene.scene}: 1 à 2 dialogues attendus"
+                f"Scène {scene.scene}: exactement 2 dialogues attendus"
             )
+
+        for dialogue in scene.dialogue:
+            word_count = len(dialogue.text.split())
+
+            if not (6 <= word_count <= 14):
+                raise RuntimeError(
+                    f"Scène {scene.scene}: réplique trop courte ou trop longue "
+                    f"({word_count} mots, attendu 6 à 14)"
+                )
 
         if not scene.prompt.strip():
             raise RuntimeError(
