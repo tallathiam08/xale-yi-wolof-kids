@@ -1,0 +1,73 @@
+name: Blender Visual Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer dépendances
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 \
+            libegl-mesa0 \
+            libgl1 \
+            libgl1-mesa-dri \
+            libglx0 \
+            libglx-mesa0 \
+            libx11-6 \
+            libxext6 \
+            libxi6 \
+            libxrender1 \
+            libxfixes3 \
+            libxkbcommon0 \
+            libsm6 \
+            libice6 \
+            libdbus-1-3
+
+      - name: Télécharger Blender
+        run: |
+          mkdir -p .tools
+
+          curl -fL \
+            -o .tools/blender.tar.xz \
+            https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz
+
+          tar -xJf .tools/blender.tar.xz -C .tools
+
+          echo "BLENDER_BIN=$PWD/.tools/blender-4.5.14-linux-x64/blender" \
+            >> "$GITHUB_ENV"
+
+      - name: Construire scène test
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          "$BLENDER_BIN" \
+            --background \
+            --python blender_engine/blender_episode_engine.py
+
+      - name: Rendre UNE image
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
+        run: |
+          "$BLENDER_BIN" \
+            --background \
+            --python blender_engine/render_preview_github.py
+
+      - name: Conserver preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: xale-yi-visual-preview-${{ github.run_number }}
+          path: blender_engine/renders/preview.png
+          retention-days: 3
