@@ -15,9 +15,37 @@ jobs:
       - name: Récupérer le projet
         uses: actions/checkout@v7
 
+      - name: Installer les dépendances graphiques Linux
+        run: |
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            libegl1 \
+            libegl-mesa0 \
+            libgl1 \
+            libgl1-mesa-dri \
+            libglx0 \
+            libglx-mesa0 \
+            libx11-6 \
+            libxext6 \
+            libxi6 \
+            libxrender1 \
+            libxfixes3 \
+            libxkbcommon0 \
+            libsm6 \
+            libice6 \
+            libdbus-1-3 \
+            libxxf86vm1 \
+            mesa-utils
+
+          echo "✅ Dépendances graphiques installées"
+
+          ldconfig -p | grep libEGL || true
+
       - name: Télécharger Blender 4.5.14
         run: |
           mkdir -p .tools
+
           curl -fL \
             -o .tools/blender.tar.xz \
             https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz
@@ -32,17 +60,23 @@ jobs:
           "$PWD/$BLENDER_DIR/blender" --version
 
       - name: Générer la scène Blender
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           mkdir -p blender_engine/renders
 
           "$BLENDER_BIN" \
-            -b \
+            --background \
             --python blender_engine/blender_episode_engine.py
 
       - name: Rendre la scène en MP4
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
+          export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-}"
+
           "$BLENDER_BIN" \
-            -b \
+            --background \
             --python blender_engine/render_scene_github.py
 
       - name: Vérifier le MP4
