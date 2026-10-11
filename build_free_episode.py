@@ -70,9 +70,7 @@ def create_scene_audio(scene_number):
     with list_file.open("w", encoding="utf-8") as f:
         for wav in files:
             safe_path = wav.resolve()
-            f.write(
-                f"file '{str(safe_path).replace(chr(39), \"'\\\\''\")}'\n"
-            )
+            f.write(f"file '{safe_path}'\n")
 
     merged = SCENES_DIR / (
         f"scene_{scene_number:02d}_audio_raw.wav"
