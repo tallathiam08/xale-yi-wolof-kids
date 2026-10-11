@@ -30,9 +30,25 @@ jobs:
       - name: Générer l'épisode
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-3.8-flash
         run: |
-          python generate_episode_github.py
+          success=0
+
+          for attempt in 1 2 3; do
+            echo "🤖 Tentative Gemini 3.1 Flash-Lite #$attempt"
+
+            if GEMINI_MODEL=gemini-3.1-flash-lite python generate_episode_github.py; then
+              success=1
+              break
+            fi
+
+            echo "⚠️ Service Gemini temporairement indisponible"
+            sleep $((attempt * 10))
+          done
+
+          if [ "$success" -ne 1 ]; then
+            echo "❌ Gemini n'est toujours pas disponible"
+            exit 1
+          fi
 
       - name: Vérifier l'épisode
         run: |
