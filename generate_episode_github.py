@@ -44,84 +44,155 @@ def main():
     client = genai.Client(api_key=api_key)
 
     prompt = f"""
-Tu es le scénariste principal de la chaîne YouTube jeunesse
+Tu es le SHOWRUNNER de la chaîne YouTube jeunesse
 « Xale Yi – Wolof Kids ».
 
-Nous créons un épisode entièrement automatisé le {now}.
-
-OBJECTIF TECHNIQUE :
-- durée totale : exactement 5 minutes
-- exactement {TOTAL_SCENES} scènes
-- chaque scène dure exactement {SCENE_DURATION} secondes
-- total : exactement {TARGET_SECONDS} secondes
-
-PERSONNAGES FIXES :
-- Samba : garçon sénégalais, t-shirt jaune, short bleu
-- Awa : fille sénégalaise, robe orange
-- Ibrahima : garçon sénégalais, lunettes rondes, polo vert, short beige
-- Toto : petit chien marron
-
-STYLE VISUEL FIXE :
-- animation 2D cartoon pour enfants
-- couleurs vives
-- expressions joyeuses
-- apparence cohérente d'une scène à l'autre
-- mêmes vêtements et mêmes personnages pendant tout l'épisode
-- ambiance sénégalaise familiale et positive
-
-RÈGLES DE L'HISTOIRE :
-1. Crée UNE histoire complète, originale et amusante.
-2. L'histoire doit progresser du début jusqu'à une vraie conclusion.
-3. Les 60 scènes doivent être liées entre elles.
-4. Aucun saut brutal ou changement inexplicable de lieu.
-5. Les scènes doivent être faciles à transformer en clips vidéo séparés.
-6. Les enfants doivent pouvoir comprendre l'histoire simplement.
-7. La fin doit contenir une petite morale positive.
-8. L'histoire doit être adaptée aux enfants.
-9. Aucun contenu violent, dangereux, sexuel ou effrayant.
-10. Le contexte peut être sénégalais : école, maison, quartier, bus,
-    plage, parc, marché, famille, anniversaire, etc.
-
-DIALOGUES :
-1. Tous les dialogues doivent être en WOLOF.
-2. Maximum 2 répliques par scène.
-3. Les phrases doivent être courtes et naturelles.
-4. Les personnages doivent réellement dialoguer.
-5. Ne donne jamais une longue narration à la place des dialogues.
-6. Chaque scène doit contenir EXACTEMENT 2 répliques.
-7. Répartis les dialogues naturellement entre Samba, Awa et Ibrahima.
-8. Toto ne parle pas : il agit, aboie ou réagit visuellement.
-9. Chaque réplique doit contenir environ 6 à 14 mots.
-10. Le deuxième personnage doit répondre rapidement au premier.
-11. Utilise des réactions amusantes et naturelles : ah!, waaw!, ehe!, déedéet!, kaay!, etc. seulement quand elles sont naturelles.
-12. Évite les longues phrases et les explications.
-13. Le rythme doit ressembler à une vraie conversation d'enfants.
-
-PROMPTS VISUELS :
-1. Les prompts visuels doivent être en ANGLAIS.
-2. Chaque prompt doit décrire précisément l'action de la scène.
-3. Conserve strictement les personnages, vêtements et style.
-4. Décris le décor, les actions et les expressions.
-5. Pas de texte à l'écran.
-6. Pas de sous-titres.
-7. Pas de logo.
-8. Pas de watermark.
-9. Aucun changement arbitraire d'apparence des personnages.
-
-STRUCTURE :
-- Scène 1 commence l'histoire.
-- Scènes 2 à 55 développent progressivement le problème et les actions.
-- Scènes 56 à 59 résolvent le problème.
-- Scène 60 conclut l'histoire avec une petite morale positive.
+Nous voulons une série originale pour enfants, inspirée par le rythme
+des grandes chaînes Kids musicales et éducatives : petites scènes,
+dialogues rapides, appels-réponses, humour visuel, répétitions,
+chansons originales, danse, surprise et beaucoup d'action.
 
 IMPORTANT :
-- Retourne UNIQUEMENT le JSON.
-- Aucun markdown.
-- EXACTEMENT {TOTAL_SCENES} scènes.
-- Numéros de scène exactement de 1 à {TOTAL_SCENES}.
-- Chaque duration_hint doit être exactement {SCENE_DURATION}.
-- Chaque scène doit contenir entre 1 et 2 dialogues.
+Nous pouvons nous inspirer de la STRUCTURE et du RYTHME de ce type de
+contenu, mais nous ne devons copier aucun dialogue, aucune histoire,
+aucune chanson ni aucun personnage appartenant à une autre chaîne.
+
+OBJECTIF :
+- exactement 60 scènes
+- chaque scène = 5 secondes
+- durée totale = exactement 300 secondes
+- exactement 2 répliques par scène
+- répliques courtes et rapides
+- 6 à 8 mots environ par réplique
+- environ 720 à 960 mots de dialogue sur tout l'épisode
+
+PERSONNAGES FIXES :
+- Samba : garçon sénégalais, joyeux, énergique
+- Awa : fille sénégalaise, vive, intelligente, drôle
+- Ibrahima : garçon sénégalais, lunettes rondes, amusant
+- Toto : petit chien marron, très joueur, ne parle jamais
+
+STYLE :
+- animation 2D cartoon premium pour enfants
+- couleurs vives
+- visages très expressifs
+- grandes réactions
+- beaucoup de mouvements
+- ambiance chaleureuse et sénégalaise
+- humour simple et positif
+- aucun contenu dangereux, violent, sexuel ou effrayant
+
+RYTHME DES DIALOGUES :
+1. Les personnages ne doivent presque jamais parler seuls pendant longtemps.
+2. Le deuxième personnage doit répondre immédiatement au premier.
+3. Utilise parfois des réactions courtes et naturelles :
+   « Waaw ! », « Déedéet ! », « Kaay ! », « Hé ! », « Woow ! »,
+   « Vite ! », « Attends ! », etc., uniquement quand cela sonne naturel.
+4. Évite les explications longues.
+5. Écris comme de vrais enfants qui parlent rapidement.
+6. Les répliques doivent provoquer une action ou une réaction visuelle.
+7. Pas de monologue.
+8. Pas de narration dans les dialogues.
+
+CONSTRUCTION DE L'HISTOIRE :
+- scènes 1–4 : HOOK immédiat et drôle
+- scènes 5–12 : découverte d'un petit problème
+- scènes 13–20 : première tentative, humour
+- scènes 21–28 : complication amusante
+- scènes 29–36 : petite chanson originale + danse ou répétition
+- scènes 37–44 : recherche / aventure / fausse piste
+- scènes 45–52 : solution collective
+- scènes 53–57 : victoire + moment drôle
+- scènes 58–60 : conclusion + morale positive
+
+ACTION :
+Chaque scène doit comporter une action visuelle clairement identifiable.
+Exemples :
+- courir
+- sauter
+- chercher
+- ouvrir
+- fermer
+- montrer
+- tirer
+- pousser
+- danser
+- rire
+- applaudir
+- faire tourner un objet
+- jouer
+- se cacher
+- suivre Toto
+- découvrir quelque chose
+
+TOTO :
+Toto doit être utile à l'histoire.
+Il peut :
+- courir
+- aboyer
+- renifler
+- se cacher
+- rapporter un objet
+- faire une petite bêtise
+- surprendre les enfants
+- déclencher un moment comique
+Il ne parle jamais.
+
+MUSIQUE :
+Crée 4 à 6 MOMENTS MUSICAUX ORIGINAUX répartis dans l'épisode.
+Ils doivent être courts et faciles à chanter.
+Ils peuvent inclure :
+- répétition d'un mot
+- comptage
+- encouragement
+- petite danse
+- refrain simple
+- sons amusants
+
+IMPORTANT :
+Les paroles des chansons doivent être ORIGINALES et en Wolof.
+Ne copie aucune chanson existante.
+
+SCÈNES MUSICALES :
+Pour les scènes musicales, les dialogues peuvent devenir des
+phrases chantées très courtes, mais chaque scène doit quand même avoir
+exactement 2 répliques.
+
+PROMPTS VISUELS :
+- écrits en ANGLAIS
+- détaillés
+- montrer précisément l'action
+- indiquer les émotions
+- indiquer le décor
+- conserver strictement l'identité des quatre personnages
+- même apparence générale d'une scène à l'autre
+- aucune écriture dans l'image
+- aucun sous-titre
+- aucun logo
+- aucun watermark
+
+CONTINUITÉ :
+Chaque scène doit être une continuation logique de la précédente.
+Le problème doit évoluer.
+Les personnages doivent savoir ce qui vient de se passer.
+
+QUALITÉ :
+Le résultat doit donner l'impression d'un mini dessin animé musical
+et non d'une suite de diapositives.
+
+À LA FIN :
+La scène 60 doit résoudre l'histoire et donner une morale courte,
+positive et compréhensible par un enfant.
+
+FORMAT :
+Retourne UNIQUEMENT le JSON conforme au schéma.
+Aucun markdown.
+EXACTEMENT 60 scènes.
+Chaque scène = duration_hint 5.
+Chaque scène = exactement 2 dialogues.
+Chaque réplique = environ 6 à 8 mots.
 """
+
 
     response = client.models.generate_content(
         model=model,
