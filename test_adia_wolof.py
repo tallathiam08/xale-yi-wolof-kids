@@ -50,6 +50,8 @@ def main():
             prompt_input_ids=prompt_ids,
         )
 
+    Path("output").mkdir(parents=True, exist_ok=True)
+
     output = "output/adia_wolof_test.wav"
 
     sf.write(
