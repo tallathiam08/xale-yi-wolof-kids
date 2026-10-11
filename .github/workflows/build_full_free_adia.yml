@@ -34,13 +34,48 @@ jobs:
           pip install git+https://github.com/huggingface/parler-tts.git
           pip install transformers soundfile accelerate sentencepiece
 
-      - name: Générer l'épisode
+      - name: Générer l'épisode avec Gemini
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-3.8-flash
         run: |
           mkdir -p output
-          python generate_episode_github.py
+
+          success=0
+
+          for attempt in 1 2 3; do
+            echo "🤖 Tentative Gemini 3.8 Flash #$attempt"
+
+            if GEMINI_MODEL=gemini-3.8-flash python generate_episode_github.py; then
+              success=1
+              break
+            fi
+
+            echo "⚠️ Gemini 3.8 indisponible, nouvelle tentative..."
+            sleep $((attempt * 15))
+          done
+
+          if [ "$success" -eq 0 ]; then
+            echo "🔄 Passage automatique à Gemini 3.5 Flash-Lite"
+
+            for attempt in 1 2 3; do
+              echo "🤖 Tentative Gemini 3.5 Flash-Lite #$attempt"
+
+              if GEMINI_MODEL=gemini-3.5-flash-lite python generate_episode_github.py; then
+                success=1
+                break
+              fi
+
+              echo "⚠️ Gemini 3.5 Flash-Lite indisponible..."
+              sleep $((attempt * 15))
+            done
+          fi
+
+          if [ "$success" -ne 1 ]; then
+            echo "❌ Gemini indisponible après toutes les tentatives"
+            exit 1
+          fi
+
+          echo "✅ Épisode généré"
 
       - name: Vérifier l'épisode
         run: |
