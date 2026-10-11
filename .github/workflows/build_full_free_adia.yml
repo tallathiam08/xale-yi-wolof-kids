@@ -1,0 +1,102 @@
+name: Build Full Free Episode ADIA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install torch
+          pip install git+https://github.com/huggingface/parler-tts.git
+          pip install transformers soundfile accelerate sentencepiece
+
+      - name: Générer l'épisode
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
+        run: |
+          mkdir -p output
+          python generate_episode_github.py
+
+      - name: Vérifier l'épisode
+        run: |
+          test -s output/episode_github_generated.json
+
+          SCENES=$(python -c 'import json; d=json.load(open("output/episode_github_generated.json", encoding="utf-8")); print(len(d["scenes"]))')
+          DURATION=$(python -c 'import json; d=json.load(open("output/episode_github_generated.json", encoding="utf-8")); print(sum(s["duration_hint"] for s in d["scenes"]))')
+
+          echo "🎞️ Scènes : $SCENES"
+          echo "⏱️ Durée : $DURATION secondes"
+
+          test "$SCENES" -eq 60
+          test "$DURATION" -eq 300
+
+      - name: Générer tous les dialogues avec ADIA
+        env:
+          ADIA_LIMIT: "1000"
+        run: |
+          python generate_adia_episode_audio.py
+
+      - name: Préparer les audios ADIA
+        run: |
+          python prepare_adia_audio.py
+
+      - name: Vérifier les audios
+        run: |
+          COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
+          echo "🎙️ WAV : $COUNT"
+          test "$COUNT" -ge 60
+          echo "✅ Audios ADIA prêts"
+
+      - name: Construire l'épisode
+        run: |
+          python build_free_episode.py
+
+      - name: Vérifier la vidéo finale
+        run: |
+          test -s output/final/episode_final.mp4
+          test -s output/final/episode.srt
+
+          DURATION=$(ffprobe \
+            -v error \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1:nokey=1 \
+            output/final/episode_final.mp4)
+
+          echo "🎬 Durée finale : ${DURATION}s"
+          echo "✅ Épisode final créé"
+
+      - name: Conserver la production
+        uses: actions/upload-artifact@v4
+        with:
+          name: episode-adia-final-${{ github.run_number }}
+          path: |
+            output/final/episode_final.mp4
+            output/final/episode.srt
+            output/episode_github_generated.json
+            output/adia_audio/manifest.json
+          retention-days: 7
