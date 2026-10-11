@@ -68,9 +68,53 @@ jobs:
             --background \
             --python blender_engine/render_asset_preview.py
 
-      - name: Conserver la preview
-        uses: actions/upload-artifact@v4
+      - name: Vérifier la preview
+        run: |
+          echo "===== RENDERS ====="
+          find blender_engine/renders \
+            -maxdepth 1 \
+            -type f \
+            -print \
+            -exec ls -lh {} \;
+
+          echo ""
+          echo "===== PREVIEW ====="
+
+          test -f \
+            blender_engine/renders/xale_asset_preview.png
+
+          test -s \
+            blender_engine/renders/xale_asset_preview.png
+
+          file \
+            blender_engine/renders/xale_asset_preview.png
+
+          echo "✅ preview.png existe et n'est pas vide"
+
+      - name: Créer un paquet preview
+        run: |
+          mkdir -p artifact
+
+          cp \
+            blender_engine/renders/xale_asset_preview.png \
+            artifact/xale_asset_preview.png
+
+          cp \
+            blender_engine/renders/xale_asset_scene.blend \
+            artifact/xale_asset_scene.blend
+
+          cp \
+            blender_engine/scenes/test_scene.json \
+            artifact/test_scene.json
+
+          ls -lh artifact/
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v7
         with:
-          name: xale-yi-real-assets-preview-${{ github.run_number }}
-          path: blender_engine/renders/xale_asset_preview.png
-          retention-days: 3
+          name: xale-yi-assets-preview-${{ github.run_number }}
+          path: ${{ github.workspace }}/artifact/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
