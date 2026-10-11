@@ -40,22 +40,63 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install pillow
 
-      - name: Vérifier les vrais assets
+      - name: Vérifier les fichiers du moteur
         run: |
-          echo "===== PERSONNAGES ====="
+          test -f blender_engine/blender_2d_asset_engine.py
+          test -f blender_engine/render_asset_preview.py
+
+          echo "✅ Moteur Blender présent"
+          echo "===== CHARACTERS ====="
           find blender_engine/assets/characters \
             -type f \
             -name "*.png" \
             | sort
 
           echo ""
-          echo "===== DECORS ====="
+          echo "===== BACKGROUNDS ====="
           find blender_engine/assets/backgrounds \
             -type f \
             | sort
 
-          echo ""
-          echo "✅ Assets présents dans le dépôt"
+      - name: Créer la scène test
+        run: |
+          mkdir -p blender_engine/scenes
+
+          cat > blender_engine/scenes/test_scene.json <<'JSON'
+          {
+            "scene_type": "music_dance",
+            "location": "school",
+            "camera": "dance",
+            "music": true,
+            "characters": [
+              {
+                "name": "Samba",
+                "action": "dance",
+                "emotion": "happy"
+              },
+              {
+                "name": "Ibrahima",
+                "action": "talk",
+                "emotion": "happy"
+              },
+              {
+                "name": "Awa",
+                "action": "dance",
+                "emotion": "excited"
+              },
+              {
+                "name": "Toto",
+                "action": "jump",
+                "emotion": "funny"
+              }
+            ]
+          }
+          JSON
+
+          test -s blender_engine/scenes/test_scene.json
+
+          echo "✅ test_scene.json créé"
+          cat blender_engine/scenes/test_scene.json
 
       - name: Recadrer les assets personnages
         run: |
@@ -69,9 +110,7 @@ jobs:
 
           count = 0
 
-          for path in sorted(
-              root.glob("*/*.png")
-          ):
+          for path in sorted(root.glob("*/*.png")):
               img = Image.open(
                   path
               ).convert("RGBA")
@@ -137,19 +176,14 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
           LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
         run: |
-          rm -f blender_engine/renders/xale_asset_scene.blend
+          rm -f \
+            blender_engine/renders/xale_asset_scene.blend
 
           "$BLENDER_BIN" \
             --background \
             --python blender_engine/blender_2d_asset_engine.py
 
-          echo ""
-          echo "===== BLEND PRODUIT ====="
-
           test -s \
-            blender_engine/renders/xale_asset_scene.blend
-
-          ls -lh \
             blender_engine/renders/xale_asset_scene.blend
 
           echo "✅ xale_asset_scene.blend créé"
@@ -159,30 +193,29 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
           LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
         run: |
+          rm -f \
+            blender_engine/renders/xale_asset_preview.png
+
           "$BLENDER_BIN" \
             --background \
             blender_engine/renders/xale_asset_scene.blend \
             --python blender_engine/render_asset_preview.py
 
-      - name: Vérifier la preview
-        run: |
-          echo "===== RENDERS ====="
-
-          find blender_engine/renders \
-            -maxdepth 1 \
-            -type f \
-            -exec ls -lh {} \;
-
-          echo ""
-          echo "===== PREVIEW ====="
-
           test -s \
             blender_engine/renders/xale_asset_preview.png
+
+          echo "✅ Preview PNG créée"
+
+      - name: Vérifier la preview
+        run: |
+          echo "===== PREVIEW ====="
 
           file \
             blender_engine/renders/xale_asset_preview.png
 
-          echo ""
+          ls -lh \
+            blender_engine/renders/xale_asset_preview.png
+
           echo "✅ PREVIEW VALIDE"
 
       - name: Préparer artifact
