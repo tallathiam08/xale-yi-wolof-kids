@@ -15,7 +15,7 @@ jobs:
       - name: Récupérer le projet
         uses: actions/checkout@v7
 
-      - name: Installer dépendances
+      - name: Installer dépendances graphiques
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -40,64 +40,76 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install pillow
 
+      - name: Vérifier les vrais assets
+        run: |
+          echo "===== PERSONNAGES ====="
+          find blender_engine/assets/characters \
+            -type f \
+            -name "*.png" \
+            | sort
+
+          echo ""
+          echo "===== DECORS ====="
+          find blender_engine/assets/backgrounds \
+            -type f \
+            | sort
+
+          echo ""
+          echo "✅ Assets présents dans le dépôt"
+
       - name: Recadrer les assets personnages
         run: |
           python3 - <<'PY'
           from pathlib import Path
           from PIL import Image
 
-          root = Path("blender_engine/assets/characters")
+          root = Path(
+              "blender_engine/assets/characters"
+          )
 
           count = 0
 
-          for path in root.glob("*/*.png"):
-              try:
-                  img = Image.open(path).convert("RGBA")
-                  alpha = img.getchannel("A")
+          for path in sorted(
+              root.glob("*/*.png")
+          ):
+              img = Image.open(
+                  path
+              ).convert("RGBA")
 
-                  bbox = alpha.getbbox()
+              alpha = img.getchannel("A")
+              bbox = alpha.getbbox()
 
-                  if bbox:
-                      cropped = img.crop(bbox)
+              if bbox:
+                  cropped = img.crop(bbox)
 
-                      # petite marge autour du personnage
-                      margin = 8
+                  margin = 8
 
-                      canvas = Image.new(
-                          "RGBA",
-                          (
-                              cropped.width + margin * 2,
-                              cropped.height + margin * 2,
-                          ),
-                          (0, 0, 0, 0),
-                      )
-
-                      canvas.paste(
-                          cropped,
-                          (margin, margin),
-                          cropped,
-                      )
-
-                      canvas.save(path)
-
-                      print(
-                          f"✅ {path} "
-                          f"{img.size} -> {canvas.size}"
-                      )
-
-                      count += 1
-                  else:
-                      print(
-                          f"⚠️ Pas d'alpha exploitable : {path}"
-                      )
-
-              except Exception as exc:
-                  raise RuntimeError(
-                      f"Erreur asset {path}: {exc}"
+                  canvas = Image.new(
+                      "RGBA",
+                      (
+                          cropped.width + margin * 2,
+                          cropped.height + margin * 2,
+                      ),
+                      (0, 0, 0, 0),
                   )
 
+                  canvas.paste(
+                      cropped,
+                      (margin, margin),
+                      cropped,
+                  )
+
+                  canvas.save(path)
+
+                  print(
+                      f"✅ {path}: "
+                      f"{img.size} -> {canvas.size}"
+                  )
+
+                  count += 1
+
           print(
-              f"✅ Assets recadrés : {count}"
+              f"✅ {count} assets recadrés"
           )
           PY
 
@@ -125,9 +137,22 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
           LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
         run: |
+          rm -f blender_engine/renders/xale_asset_scene.blend
+
           "$BLENDER_BIN" \
             --background \
             --python blender_engine/blender_2d_asset_engine.py
+
+          echo ""
+          echo "===== BLEND PRODUIT ====="
+
+          test -s \
+            blender_engine/renders/xale_asset_scene.blend
+
+          ls -lh \
+            blender_engine/renders/xale_asset_scene.blend
+
+          echo "✅ xale_asset_scene.blend créé"
 
       - name: Rendre UNE image
         env:
@@ -136,12 +161,14 @@ jobs:
         run: |
           "$BLENDER_BIN" \
             --background \
+            blender_engine/renders/xale_asset_scene.blend \
             --python blender_engine/render_asset_preview.py
 
       - name: Vérifier la preview
         run: |
-          echo "===== CONTENU RENDERS ====="
-          find "$GITHUB_WORKSPACE/blender_engine/renders" \
+          echo "===== RENDERS ====="
+
+          find blender_engine/renders \
             -maxdepth 1 \
             -type f \
             -exec ls -lh {} \;
@@ -149,34 +176,34 @@ jobs:
           echo ""
           echo "===== PREVIEW ====="
 
-          test -f \
-            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
-
           test -s \
-            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
+            blender_engine/renders/xale_asset_preview.png
 
           file \
-            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
+            blender_engine/renders/xale_asset_preview.png
 
-          echo "✅ Preview trouvée"
+          echo ""
+          echo "✅ PREVIEW VALIDE"
 
       - name: Préparer artifact
         run: |
+          rm -rf artifact
           mkdir -p artifact
 
           cp \
-            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png" \
-            artifact/xale_asset_preview.png
+            blender_engine/renders/xale_asset_preview.png \
+            artifact/
 
           cp \
-            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_scene.blend" \
-            artifact/xale_asset_scene.blend
+            blender_engine/renders/xale_asset_scene.blend \
+            artifact/
 
           cp \
-            "$GITHUB_WORKSPACE/blender_engine/scenes/test_scene.json" \
-            artifact/test_scene.json
+            blender_engine/scenes/test_scene.json \
+            artifact/
 
           echo "===== ARTIFACT ====="
+
           find artifact \
             -type f \
             -exec ls -lh {} \;

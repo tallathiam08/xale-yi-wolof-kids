@@ -4,13 +4,6 @@ from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parents[1]
 
-BLEND = (
-    PROJECT
-    / "blender_engine"
-    / "renders"
-    / "xale_asset_scene.blend"
-)
-
 OUTPUT = (
     PROJECT
     / "blender_engine"
@@ -21,15 +14,6 @@ OUTPUT = (
 OUTPUT.parent.mkdir(
     parents=True,
     exist_ok=True,
-)
-
-if not BLEND.exists():
-    raise RuntimeError(
-        f"❌ Blend introuvable : {BLEND}"
-    )
-
-bpy.ops.wm.open_mainfile(
-    filepath=str(BLEND)
 )
 
 scene = bpy.context.scene
@@ -46,46 +30,51 @@ scene.render.image_settings.file_format = "PNG"
 scene.render.film_transparent = False
 
 if scene.camera is None:
-    raise RuntimeError("❌ Aucune caméra")
+    raise RuntimeError(
+        "❌ Aucune caméra dans le .blend chargé"
+    )
 
 scene.render.filepath = str(OUTPUT)
 
-print("🎨 Rendu de la preview...")
+print("======================================")
+print("🎨 XALE YI — RENDU PREVIEW")
+print("======================================")
+print(f"📁 Sortie : {OUTPUT}")
+print(f"🎥 Caméra : {scene.camera.name}")
+print("")
 
-result = bpy.ops.render.render(
-    write_still=False
+mesh_count = sum(
+    1
+    for obj in scene.objects
+    if obj.type == "MESH"
 )
 
-print("Blender render result :", result)
+print(
+    f"🧩 Objets mesh : {mesh_count}"
+)
 
-render_result = bpy.data.images.get("Render Result")
-
-if render_result is None:
+if mesh_count < 5:
     raise RuntimeError(
-        "❌ Blender n'a pas produit de Render Result"
+        "❌ La scène Blender ne contient pas assez d'objets"
     )
 
-# Sauvegarde FORCÉE vers le chemin absolu
-render_result.save_render(
-    filepath=str(OUTPUT),
-    scene=scene,
+bpy.ops.render.render(
+    write_still=True
 )
 
 if not OUTPUT.exists():
     raise RuntimeError(
-        f"❌ PNG non créée : {OUTPUT}"
+        f"❌ Preview non créée : {OUTPUT}"
     )
 
 if OUTPUT.stat().st_size < 1000:
     raise RuntimeError(
-        f"❌ PNG anormalement petite : "
+        f"❌ Preview trop petite : "
         f"{OUTPUT.stat().st_size} octets"
     )
 
 print("")
-print("================================")
-print("✅ PREVIEW XALE YI CRÉÉE")
-print("================================")
-print(f"📁 {OUTPUT}")
+print("✅ PREVIEW CRÉÉE")
 print(f"📦 Taille : {OUTPUT.stat().st_size} octets")
-print("================================")
+print(f"📁 {OUTPUT}")
+print("======================================")
