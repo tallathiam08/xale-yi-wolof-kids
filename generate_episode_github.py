@@ -274,6 +274,25 @@ Chaque réplique = environ 6 à 8 mots.
         encoding="utf-8",
     )
 
+    french_markers = {
+        " je ", " tu ", " il ", " elle ", " on ", " nous ",
+        " vous ", " ils ", " le ", " la ", " les ", " un ",
+        " une ", " des ", " est ", " sont ", " suis ",
+        " avec ", " dans ", " pour ", " mais ", " parce ",
+        " maintenant ", " regarde ", " allons ", " très ",
+    }
+
+    for scene in episode.scenes:
+        for dialogue in scene.dialogue:
+            text_lower = f" {dialogue.text.lower().strip()} "
+            hits = sum(1 for marker in french_markers if marker in text_lower)
+
+            if hits >= 2:
+                raise RuntimeError(
+                    f"Dialogue probablement français détecté "
+                    f"(scène {scene.scene}): {dialogue.text}"
+                )
+
     total_dialogues = sum(
         len(scene.dialogue) for scene in episode.scenes
     )

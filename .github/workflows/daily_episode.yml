@@ -1,4 +1,4 @@
-name: Daily Wolof Episode
+name: Daily Full Wolof Episode
 
 on:
   schedule:
@@ -9,8 +9,9 @@ permissions:
   contents: read
 
 jobs:
-  generate:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
 
     steps:
       - name: Récupérer le projet
@@ -19,46 +20,193 @@ jobs:
       - name: Installer Python
         uses: actions/setup-python@v7
         with:
-          python-version: '3.13'
+          python-version: '3.12'
           cache: 'pip'
+
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
 
       - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install torch
+          pip install git+https://github.com/huggingface/parler-tts.git
+          pip install transformers soundfile accelerate sentencepiece
 
-      - name: Générer l'épisode
+      - name: Générer le scénario Wolof
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          mkdir -p output
+
           success=0
 
           for attempt in 1 2 3; do
-            echo "🤖 Tentative Gemini 3.1 Flash-Lite #$attempt"
+            echo "🤖 Gemini 3.8 Flash - tentative $attempt"
 
-            if GEMINI_MODEL=gemini-3.1-flash-lite python generate_episode_github.py; then
+            if GEMINI_MODEL=gemini-3.8-flash python generate_episode_github.py; then
               success=1
               break
             fi
 
-            echo "⚠️ Service Gemini temporairement indisponible"
-            sleep $((attempt * 10))
+            echo "⚠️ Nouvelle tentative..."
+            sleep $((attempt * 15))
           done
 
           if [ "$success" -ne 1 ]; then
-            echo "❌ Gemini n'est toujours pas disponible"
+            echo "🔄 Fallback Gemini 3.5 Flash-Lite"
+
+            for attempt in 1 2 3; do
+              echo "🤖 Gemini 3.5 Flash-Lite - tentative $attempt"
+
+              if GEMINI_MODEL=gemini-3.5-flash-lite python generate_episode_github.py; then
+                success=1
+                break
+              fi
+
+              sleep $((attempt * 15))
+            done
+          fi
+
+          if [ "$success" -ne 1 ]; then
+            echo "❌ Impossible de générer l'épisode"
             exit 1
           fi
 
-      - name: Vérifier l'épisode
+      - name: Vérifier le scénario
         run: |
           test -s output/episode_github_generated.json
           python -m json.tool output/episode_github_generated.json > /dev/null
-          echo "✅ Épisode Wolof valide"
 
-      - name: Conserver l'épisode
+          python - <<'PY'
+          import json
+
+          path = "output/episode_github_generated.json"
+
+          with open(path, encoding="utf-8") as f:
+              data = json.load(f)
+
+          scenes = data.get("scenes", [])
+          duration = sum(float(s.get("duration_hint", 0)) for s in scenes)
+
+          print(f"🎞️ Scènes : {len(scenes)}")
+          print(f"⏱️ Durée scénario : {duration}s")
+          print(f"📝 Titre : {data.get('title', '')}")
+
+          assert len(scenes) == 60, f"Scènes incorrectes : {len(scenes)}"
+          assert int(duration) == 300, f"Durée incorrecte : {duration}"
+          PY
+
+      - name: Générer les voix ADIA
+        env:
+          ADIA_LIMIT: "1000"
+        run: |
+          python generate_adia_episode_audio.py
+
+      - name: Préparer les audios ADIA
+        run: |
+          python prepare_adia_audio.py
+
+      - name: Vérifier les 120 dialogues
+        run: |
+          COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
+          echo "🎙️ WAV : $COUNT"
+          test "$COUNT" -eq 120
+
+      - name: Accélérer légèrement les dialogues
+        env:
+          DIALOGUE_SPEED: "1.10"
+        run: |
+          python retime_adia_audio.py
+
+      - name: Construire la vidéo
+        run: |
+          python build_free_episode.py
+
+      - name: Générer la musique originale
+        run: |
+          mkdir -p output/free_build
+          python generate_kids_music.py \
+            --duration 300 \
+            --output output/free_build/kids_music.wav
+
+      - name: Ajouter la musique
+        run: |
+          ffmpeg -y \
+            -i output/final/episode_final.mp4 \
+            -i output/free_build/kids_music.wav \
+            -filter_complex "[1:a]volume=0.07[music];[0:a][music]amix=inputs=2:duration=first:dropout_transition=2:normalize=0[a]" \
+            -map 0:v:0 \
+            -map "[a]" \
+            -c:v copy \
+            -c:a aac \
+            -b:a 160k \
+            -ar 44100 \
+            -ac 2 \
+            -movflags +faststart \
+            output/final/episode_with_music.mp4
+
+          mv output/final/episode_with_music.mp4 output/final/episode_final.mp4
+
+      - name: Vérification finale
+        run: |
+          test -s output/final/episode_final.mp4
+          test -s output/final/episode.srt
+
+          python - <<'PY'
+          import subprocess
+
+          result = subprocess.run(
+              [
+                  "ffprobe",
+                  "-v", "error",
+                  "-show_entries", "format=duration",
+                  "-of", "default=noprint_wrappers=1:nokey=1",
+                  "output/final/episode_final.mp4",
+              ],
+              capture_output=True,
+              text=True,
+          )
+
+          duration = float(result.stdout.strip())
+
+          print(f"🎬 Durée finale : {duration:.2f}s")
+
+          assert 295 <= duration <= 305, (
+              f"Durée finale incorrecte : {duration}"
+          )
+
+          audio = subprocess.run(
+              [
+                  "ffprobe",
+                  "-v", "error",
+                  "-select_streams", "a:0",
+                  "-show_entries", "stream=codec_name",
+                  "-of", "default=noprint_wrappers=1:nokey=1",
+                  "output/final/episode_final.mp4",
+              ],
+              capture_output=True,
+              text=True,
+          )
+
+          codec = audio.stdout.strip()
+          print(f"🔊 Codec audio : {codec}")
+
+          assert codec, "Aucune piste audio détectée"
+          PY
+
+          ls -lh output/final/episode_final.mp4
+
+      - name: Conserver la production
         uses: actions/upload-artifact@v4
         with:
-          name: episode-wolof-${{ github.run_number }}
-          path: output/episode_github_generated.json
+          name: xale-yi-wolof-kids-${{ github.run_number }}
+          path: |
+            output/final/episode_final.mp4
+            output/final/episode.srt
+            output/episode_github_generated.json
+            output/adia_audio/manifest.json
           retention-days: 7
