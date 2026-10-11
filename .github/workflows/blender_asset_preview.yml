@@ -1,0 +1,76 @@
+name: Xale Yi Asset Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer les dépendances graphiques
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 \
+            libegl-mesa0 \
+            libgl1 \
+            libgl1-mesa-dri \
+            libglx0 \
+            libglx-mesa0 \
+            libx11-6 \
+            libxext6 \
+            libxi6 \
+            libxrender1 \
+            libxfixes3 \
+            libxkbcommon0 \
+            libsm6 \
+            libice6 \
+            libdbus-1-3
+
+      - name: Télécharger Blender 4.5.14
+        run: |
+          mkdir -p .tools
+
+          curl -fL \
+            -o .tools/blender.tar.xz \
+            https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz
+
+          tar -xJf \
+            .tools/blender.tar.xz \
+            -C .tools
+
+          echo "BLENDER_BIN=$PWD/.tools/blender-4.5.14-linux-x64/blender" \
+            >> "$GITHUB_ENV"
+
+      - name: Construire la scène avec les vrais assets
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
+        run: |
+          "$BLENDER_BIN" \
+            --background \
+            --python blender_engine/blender_2d_asset_engine.py
+
+      - name: Rendre UNE image
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          LD_LIBRARY_PATH: "/usr/lib/x86_64-linux-gnu"
+        run: |
+          "$BLENDER_BIN" \
+            --background \
+            --python blender_engine/render_asset_preview.py
+
+      - name: Conserver la preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: xale-yi-real-assets-preview-${{ github.run_number }}
+          path: blender_engine/renders/xale_asset_preview.png
+          retention-days: 3

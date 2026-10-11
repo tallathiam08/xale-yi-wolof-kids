@@ -1,0 +1,62 @@
+{
+  "version": "3.0",
+  "source": "approved Xale Yi character reference sheet",
+  "characters": {
+    "Samba": [
+      "dance.png",
+      "front.png",
+      "gesture.png",
+      "idle.png",
+      "jump.png",
+      "run.png",
+      "talk.png",
+      "walk.png"
+    ],
+    "Ibrahima": [
+      "dance.png",
+      "front.png",
+      "gesture.png",
+      "idle.png",
+      "jump.png",
+      "run.png",
+      "talk.png",
+      "walk.png"
+    ],
+    "Awa": [
+      "dance.png",
+      "front.png",
+      "gesture.png",
+      "idle.png",
+      "jump.png",
+      "run.png",
+      "talk.png",
+      "walk.png"
+    ],
+    "Toto": [
+      "dance.png",
+      "front.png",
+      "gesture.png",
+      "idle.png",
+      "jump.png",
+      "run.png",
+      "talk.png",
+      "walk.png"
+    ]
+  },
+  "backgrounds": [
+    "bus",
+    "classroom",
+    "neighborhood",
+    "park",
+    "school"
+  ],
+  "actions": [
+    "idle",
+    "talk",
+    "walk",
+    "run",
+    "jump",
+    "dance",
+    "gesture"
+  ]
+}
