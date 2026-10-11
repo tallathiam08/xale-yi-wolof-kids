@@ -15,7 +15,7 @@ jobs:
       - name: Récupérer le projet
         uses: actions/checkout@v7
 
-      - name: Installer les dépendances graphiques
+      - name: Installer dépendances
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -35,6 +35,72 @@ jobs:
             libice6 \
             libdbus-1-3
 
+      - name: Installer Pillow
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pillow
+
+      - name: Recadrer les assets personnages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          root = Path("blender_engine/assets/characters")
+
+          count = 0
+
+          for path in root.glob("*/*.png"):
+              try:
+                  img = Image.open(path).convert("RGBA")
+                  alpha = img.getchannel("A")
+
+                  bbox = alpha.getbbox()
+
+                  if bbox:
+                      cropped = img.crop(bbox)
+
+                      # petite marge autour du personnage
+                      margin = 8
+
+                      canvas = Image.new(
+                          "RGBA",
+                          (
+                              cropped.width + margin * 2,
+                              cropped.height + margin * 2,
+                          ),
+                          (0, 0, 0, 0),
+                      )
+
+                      canvas.paste(
+                          cropped,
+                          (margin, margin),
+                          cropped,
+                      )
+
+                      canvas.save(path)
+
+                      print(
+                          f"✅ {path} "
+                          f"{img.size} -> {canvas.size}"
+                      )
+
+                      count += 1
+                  else:
+                      print(
+                          f"⚠️ Pas d'alpha exploitable : {path}"
+                      )
+
+              except Exception as exc:
+                  raise RuntimeError(
+                      f"Erreur asset {path}: {exc}"
+                  )
+
+          print(
+              f"✅ Assets recadrés : {count}"
+          )
+          PY
+
       - name: Télécharger Blender 4.5.14
         run: |
           mkdir -p .tools
@@ -47,8 +113,12 @@ jobs:
             .tools/blender.tar.xz \
             -C .tools
 
-          echo "BLENDER_BIN=$PWD/.tools/blender-4.5.14-linux-x64/blender" \
+          echo \
+            "BLENDER_BIN=$PWD/.tools/blender-4.5.14-linux-x64/blender" \
             >> "$GITHUB_ENV"
+
+          "$PWD/.tools/blender-4.5.14-linux-x64/blender" \
+            --version
 
       - name: Construire la scène avec les vrais assets
         env:
@@ -70,51 +140,52 @@ jobs:
 
       - name: Vérifier la preview
         run: |
-          echo "===== RENDERS ====="
-          find blender_engine/renders \
+          echo "===== CONTENU RENDERS ====="
+          find "$GITHUB_WORKSPACE/blender_engine/renders" \
             -maxdepth 1 \
             -type f \
-            -print \
             -exec ls -lh {} \;
 
           echo ""
           echo "===== PREVIEW ====="
 
           test -f \
-            blender_engine/renders/xale_asset_preview.png
+            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
 
           test -s \
-            blender_engine/renders/xale_asset_preview.png
+            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
 
           file \
-            blender_engine/renders/xale_asset_preview.png
+            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png"
 
-          echo "✅ preview.png existe et n'est pas vide"
+          echo "✅ Preview trouvée"
 
-      - name: Créer un paquet preview
+      - name: Préparer artifact
         run: |
           mkdir -p artifact
 
           cp \
-            blender_engine/renders/xale_asset_preview.png \
+            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_preview.png" \
             artifact/xale_asset_preview.png
 
           cp \
-            blender_engine/renders/xale_asset_scene.blend \
+            "$GITHUB_WORKSPACE/blender_engine/renders/xale_asset_scene.blend" \
             artifact/xale_asset_scene.blend
 
           cp \
-            blender_engine/scenes/test_scene.json \
+            "$GITHUB_WORKSPACE/blender_engine/scenes/test_scene.json" \
             artifact/test_scene.json
 
-          ls -lh artifact/
+          echo "===== ARTIFACT ====="
+          find artifact \
+            -type f \
+            -exec ls -lh {} \;
 
       - name: Upload artifact
-        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: xale-yi-assets-preview-${{ github.run_number }}
-          path: ${{ github.workspace }}/artifact/
+          path: artifact/
           if-no-files-found: error
           retention-days: 7
           compression-level: 0
