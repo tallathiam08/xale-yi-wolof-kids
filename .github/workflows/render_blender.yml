@@ -15,11 +15,11 @@ jobs:
       - name: Récupérer le projet
         uses: actions/checkout@v7
 
-      - name: Installer les dépendances graphiques Linux
+      - name: Installer les dépendances Linux
         run: |
           sudo apt-get update
-
           sudo apt-get install -y \
+            ffmpeg \
             libegl1 \
             libegl-mesa0 \
             libgl1 \
@@ -36,11 +36,10 @@ jobs:
             libice6 \
             libdbus-1-3 \
             libxxf86vm1 \
-            mesa-utils
+            libxxf86vm1
 
-          echo "✅ Dépendances graphiques installées"
-
-          ldconfig -p | grep libEGL || true
+          echo "✅ Dépendances installées"
+          ffmpeg -version
 
       - name: Télécharger Blender 4.5.14
         run: |
@@ -50,8 +49,7 @@ jobs:
             -o .tools/blender.tar.xz \
             https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz
 
-          tar -xJf .tools/blender.tar.xz \
-            -C .tools
+          tar -xJf .tools/blender.tar.xz -C .tools
 
           BLENDER_DIR=".tools/blender-4.5.14-linux-x64"
 
@@ -83,11 +81,13 @@ jobs:
         run: |
           test -s blender_engine/renders/xale_scene_github.mp4
 
-          ffprobe \
+          ffmpeg \
             -v error \
-            -show_entries format=duration \
-            -of default=noprint_wrappers=1:nokey=1 \
-            blender_engine/renders/xale_scene_github.mp4
+            -i blender_engine/renders/xale_scene_github.mp4 \
+            -f null -
+
+          echo "✅ MP4 valide"
+          ls -lh blender_engine/renders/xale_scene_github.mp4
 
       - name: Conserver la vidéo
         uses: actions/upload-artifact@v4
