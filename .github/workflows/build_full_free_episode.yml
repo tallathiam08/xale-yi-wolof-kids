@@ -1,0 +1,110 @@
+name: Build Full Free Episode
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install \
+            "transformers>=4.46.0" \
+            "torch>=2.0.0" \
+            "numpy>=1.24.0" \
+            "huggingface_hub>=0.24.0" \
+            "soundfile>=0.12.1" \
+            sentencepiece
+
+      - name: Générer l'épisode
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
+        run: |
+          python generate_episode_github.py
+
+      - name: Vérifier l'épisode
+        run: |
+          test -s output/episode_github_generated.json
+          python -m json.tool output/episode_github_generated.json > /dev/null
+
+          SCENES=$(python -c 'import json; print(len(json.load(open("output/episode_github_generated.json", encoding="utf-8"))["scenes"]))')
+          DURATION=$(python -c 'import json; d=json.load(open("output/episode_github_generated.json", encoding="utf-8")); print(sum(s["duration_hint"] for s in d["scenes"]))')
+
+          echo "🎞️ Scènes : $SCENES"
+          echo "⏱️ Durée : $DURATION secondes"
+
+          test "$SCENES" -eq 60
+          test "$DURATION" -eq 300
+
+          echo "✅ Épisode 5 minutes valide"
+
+      - name: Générer les dialogues Wolof
+        run: |
+          python generate_wolof_audio.py
+
+      - name: Vérifier les audios
+        run: |
+          test -s output/wolof_audio/manifest.json
+
+          WAV_COUNT=$(find output/wolof_audio -name "*.wav" | wc -l | tr -d ' ')
+          MANIFEST_COUNT=$(python -c 'import json; print(len(json.load(open("output/wolof_audio/manifest.json", encoding="utf-8"))["files"]))')
+
+          echo "🎙️ WAV : $WAV_COUNT"
+          echo "📝 Manifest : $MANIFEST_COUNT"
+
+          test "$WAV_COUNT" -eq "$MANIFEST_COUNT"
+
+          echo "✅ Audios Wolof validés"
+
+      - name: Construire l'épisode
+        run: |
+          python build_free_episode.py
+
+      - name: Vérifier la vidéo finale
+        run: |
+          test -s output/final/episode_final.mp4
+          test -s output/final/episode.srt
+
+          DURATION=$(ffprobe \
+            -v error \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1:nokey=1 \
+            output/final/episode_final.mp4)
+
+          echo "🎬 Durée vidéo : ${DURATION}s"
+          echo "✅ Vidéo finale créée"
+
+      - name: Conserver la production
+        uses: actions/upload-artifact@v4
+        with:
+          name: episode-final-${{ github.run_number }}
+          path: |
+            output/final/episode_final.mp4
+            output/final/episode.srt
+            output/episode_github_generated.json
+            output/wolof_audio/manifest.json
+          retention-days: 7
+e0f
