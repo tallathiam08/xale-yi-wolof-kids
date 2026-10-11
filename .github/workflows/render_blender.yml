@@ -1,0 +1,63 @@
+name: Render Blender Scene
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Télécharger Blender 4.5.14
+        run: |
+          mkdir -p .tools
+          curl -fL \
+            -o .tools/blender.tar.xz \
+            https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz
+
+          tar -xJf .tools/blender.tar.xz \
+            -C .tools
+
+          BLENDER_DIR=".tools/blender-4.5.14-linux-x64"
+
+          echo "BLENDER_BIN=$PWD/$BLENDER_DIR/blender" >> "$GITHUB_ENV"
+
+          "$PWD/$BLENDER_DIR/blender" --version
+
+      - name: Générer la scène Blender
+        run: |
+          mkdir -p blender_engine/renders
+
+          "$BLENDER_BIN" \
+            -b \
+            --python blender_engine/blender_episode_engine.py
+
+      - name: Rendre la scène en MP4
+        run: |
+          "$BLENDER_BIN" \
+            -b \
+            --python blender_engine/render_scene_github.py
+
+      - name: Vérifier le MP4
+        run: |
+          test -s blender_engine/renders/xale_scene_github.mp4
+
+          ffprobe \
+            -v error \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1:nokey=1 \
+            blender_engine/renders/xale_scene_github.mp4
+
+      - name: Conserver la vidéo
+        uses: actions/upload-artifact@v4
+        with:
+          name: xale-yi-blender-scene-${{ github.run_number }}
+          path: blender_engine/renders/xale_scene_github.mp4
+          retention-days: 7
