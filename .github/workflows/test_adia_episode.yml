@@ -19,48 +19,33 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-          cache: 'pip'
-
-      - name: Installer les dépendances du projet
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
 
       - name: Installer ADIA
         run: |
+          python -m pip install --upgrade pip
           pip install torch
           pip install git+https://github.com/huggingface/parler-tts.git
           pip install transformers soundfile accelerate sentencepiece
 
-      - name: Générer un épisode test
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-3.8-flash
+      - name: Générer 3 dialogues Wolof avec ADIA
         run: |
-          mkdir -p output
-          python generate_episode_github.py
-
-      - name: Générer 3 dialogues avec ADIA
-        env:
-          ADIA_LIMIT: "3"
-        run: |
-          python generate_adia_episode_audio.py
+          python generate_adia_test_only.py
 
       - name: Vérifier les audios
         run: |
-          test -s output/adia_audio/manifest.json
+          test -s output/adia_audio_test/manifest.json
 
-          COUNT=$(find output/adia_audio -name "*.wav" | wc -l | tr -d ' ')
+          COUNT=$(find output/adia_audio_test -name "*.wav" | wc -l | tr -d ' ')
 
           echo "🎙️ Audios générés : $COUNT"
 
           test "$COUNT" -eq 3
 
-          echo "✅ 3 dialogues ADIA générés"
+          echo "✅ 3 audios ADIA générés"
 
       - name: Conserver les audios
         uses: actions/upload-artifact@v4
         with:
           name: adia-episode-test
-          path: output/adia_audio/
+          path: output/adia_audio_test/
           retention-days: 7
