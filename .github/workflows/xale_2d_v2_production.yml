@@ -1,0 +1,226 @@
+name: Xale Yi - Full 2D V2 Production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
+
+      - name: Installer Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installer dépendances Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pillow
+          pip install torch
+          pip install git+https://github.com/huggingface/parler-tts.git
+          pip install transformers
+          pip install soundfile
+          pip install accelerate
+          pip install sentencepiece
+
+      - name: Générer l'épisode Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python generate_episode_github.py
+
+      - name: Vérifier le scénario
+        run: |
+          test -s output/episode_github_generated.json
+
+          python - <<'PY'
+          import json
+
+          with open(
+              "output/episode_github_generated.json",
+              encoding="utf-8",
+          ) as f:
+              data = json.load(f)
+
+          scenes = data["scenes"]
+
+          assert len(scenes) == 60
+          assert sum(
+              s["duration_hint"]
+              for s in scenes
+          ) == 300
+          assert all(
+              len(s["dialogue"]) == 2
+              for s in scenes
+          )
+          assert all(
+              2 <= len(s["characters"]) <= 4
+              for s in scenes
+          )
+
+          print("✅ 60 scènes / 300 secondes / 120 dialogues")
+          print(
+              "📍 Lieux :",
+              sorted({
+                  s["location"]
+                  for s in scenes
+              }),
+          )
+          print(
+              "🎵 Scènes musicales :",
+              sum(
+                  1 for s in scenes
+                  if s.get("music")
+              ),
+          )
+          PY
+
+      - name: Vérifier les assets Xale Yi
+        run: |
+          for character in Samba Ibrahima Awa Toto
+          do
+            test -s \
+              "blender_engine/assets/characters/$character/front.png"
+          done
+
+          echo "✅ 4 personnages Xale Yi présents"
+
+      - name: Render 60 scènes 2D V2
+        env:
+          XALE_WORKERS: "4"
+          XALE_WIDTH: "1280"
+          XALE_HEIGHT: "720"
+          XALE_RENDER_FPS: "20"
+          XALE_OUTPUT_FPS: "30"
+        run: |
+          python render_episode_2d_v2.py
+
+      - name: Vérifier la vidéo 2D
+        run: |
+          test -s output/2d/episode_silent.mp4
+
+          ffmpeg \
+            -v error \
+            -i output/2d/episode_silent.mp4 \
+            -f null -
+
+          DURATION=$(ffprobe \
+            -v error \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1:nokey=1 \
+            output/2d/episode_silent.mp4)
+
+          echo "🎬 Durée 2D : ${DURATION}s"
+
+      - name: Générer les 120 voix ADIA
+        env:
+          ADIA_LIMIT: "120"
+        run: |
+          python generate_adia_episode_audio.py
+
+      - name: Préparer les voix ADIA
+        run: |
+          python prepare_adia_audio.py
+
+      - name: Vérifier les 120 WAV
+        run: |
+          COUNT=$(find output/wolof_audio \
+            -name "*.wav" \
+            | wc -l \
+            | tr -d ' ')
+
+          echo "🎙️ WAV : $COUNT"
+          test "$COUNT" -eq 120
+
+      - name: Accélérer légèrement les voix
+        env:
+          DIALOGUE_SPEED: "1.10"
+        run: |
+          python retime_adia_audio.py
+
+      - name: Générer musique originale
+        run: |
+          mkdir -p output/free_build
+          python generate_kids_music.py \
+            --duration 300 \
+            --output output/free_build/kids_music.wav
+
+      - name: Assembler épisode
+        run: |
+          python assemble_full_episode.py
+
+      - name: Vérifier épisode final
+        run: |
+          test -s output/final/episode_final.mp4
+          test -s output/final/episode.srt
+
+          ffmpeg \
+            -v error \
+            -i output/final/episode_final.mp4 \
+            -f null -
+
+          DURATION=$(ffprobe \
+            -v error \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1:nokey=1 \
+            output/final/episode_final.mp4)
+
+          echo "🎬 Durée finale : ${DURATION}s"
+
+          python - <<'PY'
+          import subprocess
+
+          value = subprocess.run(
+              [
+                  "ffprobe",
+                  "-v",
+                  "error",
+                  "-show_entries",
+                  "format=duration",
+                  "-of",
+                  "default=noprint_wrappers=1:nokey=1",
+                  "output/final/episode_final.mp4",
+              ],
+              capture_output=True,
+              text=True,
+              check=True,
+          )
+
+          duration = float(value.stdout.strip())
+
+          assert 295 <= duration <= 305
+
+          print(
+              f"✅ Épisode final : {duration:.2f}s"
+          )
+          PY
+
+      - name: Conserver la production
+        uses: actions/upload-artifact@v7
+        with:
+          name: xale-yi-2d-v2-episode-${{ github.run_number }}
+          path: |
+            output/final/episode_final.mp4
+            output/final/episode.srt
+            output/episode_github_generated.json
+            output/2d/episode_silent.mp4
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0

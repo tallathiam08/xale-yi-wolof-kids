@@ -1,0 +1,90 @@
+name: Xale Yi 2D V2 Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Pillow et FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pillow
+
+      - name: Créer la scène de preview
+        run: |
+          mkdir -p output
+
+          cat > output/preview_scene.json <<'JSON'
+          {
+            "scene_type": "music_dance",
+            "location": "school",
+            "camera": "dance",
+            "music": true,
+            "characters": [
+              {
+                "name": "Samba",
+                "action": "dance",
+                "emotion": "happy"
+              },
+              {
+                "name": "Ibrahima",
+                "action": "talk",
+                "emotion": "happy"
+              },
+              {
+                "name": "Awa",
+                "action": "dance",
+                "emotion": "excited"
+              },
+              {
+                "name": "Toto",
+                "action": "jump",
+                "emotion": "funny"
+              }
+            ],
+            "dialogue": [
+              {
+                "speaker": "Ibrahima",
+                "text": "Sama xarit yi, nu ngi danse!"
+              },
+              {
+                "speaker": "Awa",
+                "text": "Toto itam dina foof!"
+              }
+            ]
+          }
+          JSON
+
+      - name: Rendre UNE preview
+        run: |
+          python3 xale_2d_engine_v2.py \
+            --scene output/preview_scene.json \
+            --output output/xale_yi_v2_preview.jpg \
+            --preview
+
+      - name: Vérifier la preview
+        run: |
+          test -s output/xale_yi_v2_preview.jpg
+          file output/xale_yi_v2_preview.jpg
+          ls -lh output/xale_yi_v2_preview.jpg
+
+      - name: Upload preview
+        uses: actions/upload-artifact@v7
+        with:
+          name: xale-yi-v2-preview-${{ github.run_number }}
+          path: output/xale_yi_v2_preview.jpg
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
