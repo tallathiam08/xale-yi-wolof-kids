@@ -7,7 +7,7 @@ PROJECT = Path(".")
 EPISODE_FILE = PROJECT / "output/episode_github_generated.json"
 
 AUDIO_DIR = PROJECT / "output/wolof_audio"
-BLENDER_VIDEO = PROJECT / "output/blender/episode_silent.mp4"
+BLENDER_VIDEO = PROJECT / "output/2d/episode_silent.mp4"
 
 MUSIC_FILE = PROJECT / "output/free_build/kids_music.wav"
 
