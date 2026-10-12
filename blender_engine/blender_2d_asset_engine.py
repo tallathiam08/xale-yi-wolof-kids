@@ -41,11 +41,11 @@ CHARACTER_HEIGHT = {
 
 
 CAMERA_SCALE = {
-    "wide": 7.0,
+    "wide": 7.8,
     "medium": 7.0,
     "close": 5.5,
     "follow": 7.4,
-    "dance": 7.4,
+    "dance": 8.0,
 }
 
 
@@ -434,7 +434,7 @@ def animate_character(
 
 def create_camera(camera_type):
     bpy.ops.object.camera_add(
-        location=(0, -20, 2.4),
+        location=(0, -20, 1.55),
         rotation=(math.radians(90), 0, 0),
     )
 
@@ -599,7 +599,10 @@ def build_scene(
 
         # Les enfants sont posés sur le sol.
         # Toto est légèrement plus bas.
-        plane.location.z = height / 2
+        if name == "Toto":
+            plane.location.z = 1.05
+        else:
+            plane.location.z = 1.68
 
         # Profondeur contrôlée : tous devant le décor.
         plane.location.y = -0.5 - (index * 0.03)
