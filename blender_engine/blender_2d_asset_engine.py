@@ -41,11 +41,11 @@ CHARACTER_HEIGHT = {
 
 
 CAMERA_SCALE = {
-    "wide": 9.0,
+    "wide": 7.0,
     "medium": 7.0,
     "close": 5.5,
     "follow": 7.4,
-    "dance": 8.8,
+    "dance": 7.4,
 }
 
 
@@ -438,7 +438,7 @@ def animate_character(
 
 def create_camera(camera_type):
     bpy.ops.object.camera_add(
-        location=(0, -20, 3.6),
+        location=(0, -20, 2.4),
         rotation=(math.radians(90), 0, 0),
     )
 
@@ -449,7 +449,7 @@ def create_camera(camera_type):
 
     camera.data.ortho_scale = CAMERA_SCALE.get(
         camera_type,
-        9.0,
+        7.0,
     )
 
     camera.data.clip_start = 0.1
@@ -566,17 +566,16 @@ def build_scene(
             "idle",
         )
 
-        height = CHARACTER_HEIGHT.get(
-            name,
-            3.75,
-        )
+        if name == "Toto":
+            height = 2.15
+        else:
+            height = 3.35
 
         image_path = get_action_image(
             name,
             action,
         )
 
-        # Read dimensions to preserve aspect ratio
         image = load_image(image_path)
 
         ratio = (
@@ -599,10 +598,12 @@ def build_scene(
             material_prefix=name,
         )
 
-        # Slight depth separation
-        plane.location.y = (
-            -0.10 * index
-        )
+        # Les enfants sont posés sur le sol.
+        # Toto est légèrement plus bas.
+        plane.location.z = height / 2
+
+        # Profondeur contrôlée : tous devant le décor.
+        plane.location.y = -0.5 - (index * 0.03)
 
         animate_character(
             plane,

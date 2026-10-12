@@ -33,7 +33,7 @@ for obj in list(bpy.data.objects):
 
 # Caméra frontale
 bpy.ops.object.camera_add(
-    location=(0, -20, 3.6),
+    location=(0, -20, 2.4),
     rotation=(math.radians(90), 0, 0),
 )
 
@@ -41,7 +41,7 @@ camera = bpy.context.object
 camera.name = "XalePreviewCamera"
 
 camera.data.type = "ORTHO"
-camera.data.ortho_scale = 9.0
+camera.data.ortho_scale = 7.0
 
 camera.data.clip_start = 0.1
 camera.data.clip_end = 1000
