@@ -41,11 +41,11 @@ CHARACTER_HEIGHT = {
 
 
 CAMERA_SCALE = {
-    "wide": 8.4,
+    "wide": 9.0,
     "medium": 7.0,
     "close": 5.5,
     "follow": 7.4,
-    "dance": 8.0,
+    "dance": 8.8,
 }
 
 
@@ -157,6 +157,7 @@ def create_plane(
     bpy.ops.mesh.primitive_plane_add(
         size=2,
         location=(x, y, z),
+        rotation=(math.radians(90), 0, 0),
     )
 
     obj = bpy.context.object
@@ -171,6 +172,7 @@ def create_plane(
     obj.data.materials.append(material)
 
     return obj
+
 
 
 def background_path(location):
@@ -210,8 +212,8 @@ def create_background(location):
         width=12.8,
         height=7.2,
         x=0,
-        y=0.4,
-        z=-2.0,
+        y=2.0,
+        z=3.6,
         material_prefix="BG",
     )
 
@@ -436,19 +438,18 @@ def animate_character(
 
 def create_camera(camera_type):
     bpy.ops.object.camera_add(
-        location=(0, 0, 10),
-        rotation=(0, 0, 0),
+        location=(0, -20, 3.6),
+        rotation=(math.radians(90), 0, 0),
     )
 
     camera = bpy.context.object
-
     camera.name = "XaleCamera"
 
     camera.data.type = "ORTHO"
 
     camera.data.ortho_scale = CAMERA_SCALE.get(
         camera_type,
-        8.4,
+        9.0,
     )
 
     camera.data.clip_start = 0.1
@@ -457,6 +458,7 @@ def create_camera(camera_type):
     bpy.context.scene.camera = camera
 
     return camera
+
 
 
 def configure_scene(data):
@@ -490,10 +492,15 @@ def configure_scene(data):
     scene.render.film_transparent = False
 
     scene.world.color = (
-        0.05,
-        0.05,
-        0.05,
+        0.35,
+        0.55,
+        0.75,
     )
+
+    try:
+        scene.view_settings.view_transform = "Standard"
+    except Exception:
+        pass
 
     scene.view_settings.look = (
         "None"
