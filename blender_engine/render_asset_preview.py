@@ -1,5 +1,6 @@
 import bpy
 from pathlib import Path
+import math
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -11,10 +12,6 @@ OUTPUT = (
     / "xale_asset_preview.png"
 )
 
-OUTPUT.parent.mkdir(
-    parents=True,
-    exist_ok=True,
-)
 
 scene = bpy.context.scene
 
@@ -26,36 +23,57 @@ scene.render.resolution_percentage = 100
 
 scene.frame_set(45)
 
+# Supprimer les anciennes caméras
+for obj in list(bpy.data.objects):
+    if obj.type == "CAMERA":
+        bpy.data.objects.remove(
+            obj,
+            do_unlink=True,
+        )
+
+# Caméra frontale
+bpy.ops.object.camera_add(
+    location=(0, -20, 3.6),
+    rotation=(math.radians(90), 0, 0),
+)
+
+camera = bpy.context.object
+camera.name = "XalePreviewCamera"
+
+camera.data.type = "ORTHO"
+camera.data.ortho_scale = 9.0
+
+camera.data.clip_start = 0.1
+camera.data.clip_end = 1000
+
+scene.camera = camera
+
 scene.render.image_settings.file_format = "PNG"
 scene.render.film_transparent = False
-
-if scene.camera is None:
-    raise RuntimeError(
-        "❌ Aucune caméra dans le .blend chargé"
-    )
-
 scene.render.filepath = str(OUTPUT)
 
+try:
+    scene.view_settings.view_transform = "Standard"
+except Exception:
+    pass
+
 print("======================================")
-print("🎨 XALE YI — RENDU PREVIEW")
+print("🎨 XALE YI — PREVIEW V4")
 print("======================================")
-print(f"📁 Sortie : {OUTPUT}")
-print(f"🎥 Caméra : {scene.camera.name}")
+print(f"🎥 Caméra : frontale")
+print(f"📐 640x360")
 print("")
 
-mesh_count = sum(
-    1
-    for obj in scene.objects
-    if obj.type == "MESH"
-)
+objects = [
+    o for o in scene.objects
+    if o.type == "MESH"
+]
 
-print(
-    f"🧩 Objets mesh : {mesh_count}"
-)
+print(f"🧩 Objets : {len(objects)}")
 
-if mesh_count < 5:
+if len(objects) < 5:
     raise RuntimeError(
-        "❌ La scène Blender ne contient pas assez d'objets"
+        "❌ Pas assez d'objets dans la scène"
     )
 
 bpy.ops.render.render(
@@ -64,17 +82,16 @@ bpy.ops.render.render(
 
 if not OUTPUT.exists():
     raise RuntimeError(
-        f"❌ Preview non créée : {OUTPUT}"
+        "❌ Preview PNG non créée"
     )
 
 if OUTPUT.stat().st_size < 1000:
     raise RuntimeError(
-        f"❌ Preview trop petite : "
-        f"{OUTPUT.stat().st_size} octets"
+        "❌ Preview PNG anormalement petite"
     )
 
 print("")
 print("✅ PREVIEW CRÉÉE")
-print(f"📦 Taille : {OUTPUT.stat().st_size} octets")
 print(f"📁 {OUTPUT}")
+print(f"📦 {OUTPUT.stat().st_size} octets")
 print("======================================")
