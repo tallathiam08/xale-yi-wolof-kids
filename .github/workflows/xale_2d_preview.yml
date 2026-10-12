@@ -1,0 +1,60 @@
+name: Xale Yi 2D Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v7
+
+      - name: Installer Pillow et FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pillow
+
+      - name: Vérifier les assets
+        run: |
+          test -f xale_2d_engine.py
+          test -f blender_engine/scenes/test_scene.json
+
+          find blender_engine/assets/characters \
+            -type f \
+            -name "*.png" \
+            | sort
+
+          echo "✅ Assets personnages trouvés"
+
+      - name: Rendre UNE preview
+        run: |
+          python3 xale_2d_engine.py \
+            --scene blender_engine/scenes/test_scene.json \
+            --output xale_2d_preview.jpg \
+            --preview
+
+      - name: Vérifier
+        run: |
+          test -s xale_2d_preview.jpg
+
+          file xale_2d_preview.jpg
+          ls -lh xale_2d_preview.jpg
+
+          echo "✅ Preview valide"
+
+      - name: Upload preview
+        uses: actions/upload-artifact@v7
+        with:
+          name: xale-yi-2d-preview-${{ github.run_number }}
+          path: xale_2d_preview.jpg
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
