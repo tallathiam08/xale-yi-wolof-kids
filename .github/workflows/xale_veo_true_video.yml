@@ -1,0 +1,63 @@
+name: Xale Yi - TRUE VIDEO Veo 3.1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Google SDK
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -U google-genai
+
+      - name: Verify inputs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "$GEMINI_API_KEY" || (echo "Missing GEMINI_API_KEY GitHub secret" && exit 1)
+          test -f output/episode_github_generated.json || \
+            test -f output/episode_scenes.json || \
+            (echo "Missing episode JSON" && exit 1)
+
+      - name: Generate real animated scenes with Veo
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VEO_MODEL: veo-3.1-lite-generate-preview
+        run: |
+          python veo_3_1_true_video.py \
+            --episode output/episode_github_generated.json \
+            --images-root output \
+            --out output/true_video/episode_silent.mp4 \
+            --workers 2
+
+      - name: Upload true video
+        uses: actions/upload-artifact@v4
+        with:
+          name: xale-yi-veo-true-video
+          path: |
+            output/true_video/episode_silent.mp4
+            output/true_video/episode_silent.manifest.json
+            output/true_video/cache/**/job.json
+          retention-days: 3
