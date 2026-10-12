@@ -44,7 +44,33 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          python generate_episode_github.py
+          set -e
+
+          for attempt in 1 2 3
+          do
+            echo ""
+            echo "=========================================="
+            echo "🤖 GENERATION GEMINI — ESSAI $attempt/3"
+            echo "=========================================="
+            echo ""
+
+            if GENERATION_ATTEMPT="$attempt"               python generate_episode_github.py
+            then
+              echo ""
+              echo "✅ Épisode Gemini accepté"
+              exit 0
+            fi
+
+            echo ""
+            echo "⚠️ Génération refusée par la validation"
+            echo "🔄 Nouvelle génération..."
+            echo ""
+
+            sleep 5
+          done
+
+          echo "❌ Gemini n'a pas produit un épisode valide après 3 essais"
+          exit 1
 
       - name: Vérifier le scénario
         run: |
