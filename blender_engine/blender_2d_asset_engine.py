@@ -260,10 +260,6 @@ def animate_character(
 ):
     action = str(action).lower()
 
-    obj.location.z = (
-        obj.dimensions.z / 2
-    )
-
     # --------------------------------------------------------
     # IDLE / TALK : petit mouvement naturel
     # --------------------------------------------------------
@@ -499,6 +495,9 @@ def configure_scene(data):
 
     try:
         scene.view_settings.view_transform = "Standard"
+        scene.view_settings.look = "None"
+        scene.view_settings.exposure = 2.0
+        scene.view_settings.gamma = 1.0
     except Exception:
         pass
 
