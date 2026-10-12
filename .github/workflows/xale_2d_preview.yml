@@ -22,10 +22,51 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install pillow
 
-      - name: Vérifier les assets
+      - name: Vérifier le moteur
         run: |
           test -f xale_2d_engine.py
-          test -f blender_engine/scenes/test_scene.json
+
+          echo "✅ xale_2d_engine.py présent"
+
+      - name: Créer la scène de preview
+        run: |
+          mkdir -p blender_engine/scenes
+
+          cat > blender_engine/scenes/preview_scene.json <<'JSON'
+          {
+            "scene_type": "music_dance",
+            "location": "school",
+            "camera": "wide",
+            "music": true,
+            "characters": [
+              {
+                "name": "Samba",
+                "action": "dance",
+                "emotion": "happy"
+              },
+              {
+                "name": "Ibrahima",
+                "action": "talk",
+                "emotion": "happy"
+              },
+              {
+                "name": "Awa",
+                "action": "dance",
+                "emotion": "excited"
+              },
+              {
+                "name": "Toto",
+                "action": "jump",
+                "emotion": "funny"
+              }
+            ]
+          }
+          JSON
+
+          test -s blender_engine/scenes/preview_scene.json
+
+          echo "✅ Scène preview créée"
+          cat blender_engine/scenes/preview_scene.json
 
           find blender_engine/assets/characters \
             -type f \
@@ -37,7 +78,7 @@ jobs:
       - name: Rendre UNE preview
         run: |
           python3 xale_2d_engine.py \
-            --scene blender_engine/scenes/test_scene.json \
+            --scene blender_engine/scenes/preview_scene.json \
             --output xale_2d_preview.jpg \
             --preview
 
