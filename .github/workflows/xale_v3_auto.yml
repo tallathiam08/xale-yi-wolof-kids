@@ -1,0 +1,75 @@
+name: Xale Yi v3 – épisode automatique
+
+on:
+  schedule:
+    # mardi et vendredi à 10h (heure de Dakar = UTC)
+    - cron: "17 10 * * 2,5"
+  workflow_dispatch:
+    inputs:
+      episode:
+        description: "Épisode à fabriquer (ex. ep02). Vide = prochain épisode."
+        required: false
+        default: ""
+      publish:
+        description: "Publier sur YouTube ? (1 = oui, 0 = non, juste fabriquer)"
+        required: false
+        default: "1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: xale-v3
+  cancel-in-progress: false
+
+jobs:
+  episode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer FFmpeg et polices
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Installer les dépendances Python
+        run: pip install numpy opencv-python-headless pillow requests google-api-python-client google-auth
+
+      - name: Fabriquer (et publier) l'épisode
+        id: run
+        working-directory: v3
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          PUBLISH: ${{ github.event.inputs.publish || '1' }}
+          PUBLISH_PRIVACY: ${{ vars.PUBLISH_PRIVACY || 'public' }}
+        run: python run.py ${{ github.event.inputs.episode }}
+
+      - name: Enregistrer l'avancement (épisodes écrits / publiés)
+        if: always()
+        run: |
+          git config user.name "xale-yi-bot"
+          git config user.email "xale-yi-bot@users.noreply.github.com"
+          git add v3/episodes v3/state || true
+          git diff --cached --quiet || (git commit -m "Épisode ${{ steps.run.outputs.episode }} : avancement" && git push)
+
+      - name: Garder les vidéos (7 jours)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xale-v3-${{ steps.run.outputs.episode }}-${{ github.run_number }}
+          path: |
+            v3/build/*/episode.mp4
+            v3/build/*/short.mp4
+            v3/build/*/thumbnail.jpg
+          retention-days: 7
+          if-no-files-found: ignore
