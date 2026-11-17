@@ -2,8 +2,7 @@ name: Xale Yi - TRUE VIDEO Veo 3.1
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 5 * * *"
+  # planification désactivée (remplacée par xale_v3_auto.yml)
 
 permissions:
   contents: read

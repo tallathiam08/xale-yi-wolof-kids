@@ -1,8 +1,7 @@
 name: Daily Full Wolof Episode
 
 on:
-  schedule:
-    - cron: '0 14 * * *'
+  # planification désactivée (remplacée par xale_v3_auto.yml)
   workflow_dispatch:
 
 permissions:

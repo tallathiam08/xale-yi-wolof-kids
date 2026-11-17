@@ -1,0 +1,99 @@
+{
+  "id": "ep02",
+  "number": 2,
+  "title": "Modou va à l'école",
+  "subtitle": "Man itam, élève laa !",
+  "youtube": {
+    "title": "Modou va à l'école 🏫 Man itam, élève laa ! | Dessin animé en wolof pour enfants | Épisode 2",
+    "description": "Modou s'est caché dans le sac d'Awa… et maintenant il est en classe ! 😄 Il lève la main, il a faim, il s'endort sur le cahier d'Awa… Qu'est-ce que Maîtresse Sokhna va faire de lui ?\nModou dafa nëbëtou ci sac Awa… léegi mu ngi ci classe bi ! 😂\n\n🎵 Nouvelle chanson : « Toogal, déglul » – chante avec Modou et toute la classe !\n\n👨‍👩‍👧‍👦 Les personnages : Awa (5 ans), Modou (3 ans), bébé Papa, Yaay Fatou, Baay Ibou, Mame Ndèye et Maîtresse Sokhna.\n\n📺 De nouveaux épisodes chaque semaine : des histoires drôles de la vie de tous les jours, l'école, la famille et des chansons en wolof.\n👉 Abonne-toi pour ne pas rater la suite !\n\nSous-titres en wolof et en français.\n\n#wolof #dessinanimé #enfants #senegal #chansonenfant",
+    "tags": ["wolof", "dessin animé wolof", "chanson wolof", "chanson enfant wolof", "dessin animé sénégalais", "enfants sénégal", "comptine wolof", "Awa et Modou", "école", "kids wolof", "Senegal cartoon", "Wolof cartoon for kids", "Wolof songs for kids", "apprendre le wolof", "xale yi", "toogal déglul", "dessin animé africain"]
+  },
+  "short_youtube": {
+    "title": "Modou dafa nelaw ci cahier bi ! 😴😂 #wolof #shorts #dessinanimé",
+    "description": "Modou s'endort en classe sur le cahier d'Awa… 😂 Épisode complet sur la chaîne ! #wolof #senegal #enfants"
+  },
+  "thumbnail": {"bg": "classe", "chars": ["Modou", "Awa"], "text": ["MAN ITAM", "ÉLÈVE LAA !"]},
+  "short": {"scene": 0, "from": 4, "to": 12, "text": ["MODOU", "DAFA NELAW !"]},
+  "song": {
+    "title": "Toogal, déglul",
+    "seconds": 60,
+    "lyrics": [
+      "Toogal, déglul, jàngal bu baax !",
+      "Toogal, déglul, ci sunu ékool !",
+      "Yoxo ci kaw, bul wax, bul daw…",
+      "…déglul Maîtresse !",
+      "Toogal, déglul, jàngal bu baax !",
+      "Toogal, déglul, ci sunu ékool !",
+      "Maîtresse dafay wax, ñun ñu ngiy déglu…",
+      "…ak sunuy xarit !",
+      "Toogal, déglul, jàngal bu baax !",
+      "Hi hi hi !"
+    ]
+  },
+  "outro_bg": "classe",
+  "scenes": [
+    {
+      "bg": "classe",
+      "cast": [{"name": "Awa", "x": 1100}, {"name": "Modou", "x": 1500}, {"name": "Maîtresse Sokhna", "x": 2330}],
+      "events": [
+        ["wait", 1.0],
+        ["line", "Maîtresse Sokhna", "Modou, yow dangay toog ak Awa tey. Dinaa woo sa Yaay.", "Modou, tu t'assois avec Awa aujourd'hui. Je vais appeler ta maman."],
+        ["act", "Modou", "hop", 1.4, {"n": 3}],
+        ["line", "Modou", "Youpi ! Man itam, élève laa !", "Youpi ! Moi aussi, je suis élève !"],
+        ["line", "Awa", "Modou, toogal bu baax, te noppil !", "Modou, assieds-toi bien et tais-toi !"],
+        ["line", "Maîtresse Sokhna", "Xale yi, ñu woy sunu bees chanson !", "Les enfants, chantons notre nouvelle chanson !"],
+        ["act", "Awa", "dance", 61], ["act", "Modou", "dance", 61],
+        ["song"],
+        ["act", "Modou", "hop", 1.6, {"n": 4}],
+        ["line", "Modou", "Maîtresse ! Maîtresse !", "Maîtresse ! Maîtresse !"],
+        ["line", "Maîtresse Sokhna", "Waaw, Modou ?", "Oui, Modou ?"],
+        ["line", "Modou", "Dama xiif !", "J'ai faim !"],
+        ["line", "Élèves", "Ha ha ha !", "", {"tts": "[laughs] Ha ha ha !"}],
+        ["line", "Maîtresse Sokhna", "Xaaral ba récréation, Modou.", "Attends la récréation, Modou."],
+        ["line", "Modou", "Dama nelaw…", "J'ai sommeil…", {"tts": "[yawns] Dama nelaw…"}],
+        ["act", "Modou", "move", 1.0, {"x": 1330}],
+        ["line", "Awa", "Modou ? Modou ! Dafa nelaw ci sama cahier !", "Modou ? Modou ! Il s'est endormi sur mon cahier !", {"tts": "[surprised] Modou ? Modou ! Dafa nelaw ci sama cahier !"}],
+        ["line", "Modou", "Rrrr… rrrr…", "(il ronfle)", {"tts": "[snoring] Rrrr... rrrr...", "z": 2.3}],
+        ["line", "Élèves", "Ha ha ha !", "", {"tts": "[laughs] Ha ha ha ha !"}],
+        ["wait", 0.6]
+      ]
+    },
+    {
+      "bg": "classe",
+      "cast": [{"name": "Awa", "x": 1050}, {"name": "Modou", "x": 1400}, {"name": "Yaay Fatou", "x": 1850}, {"name": "Maîtresse Sokhna", "x": 2400}],
+      "events": [
+        ["wait", 0.8],
+        ["line", "Yaay Fatou", "Asalaa maalekum, Maîtresse. Baal ma, Modou dafa nëbëtou ci sac Awa !", "Bonjour, Maîtresse. Pardon, Modou s'était caché dans le sac d'Awa !"],
+        ["line", "Maîtresse Sokhna", "Amul solo, Yaay Fatou. Modou dafa bëgg jàng lool !", "Ce n'est pas grave, Yaay Fatou. Modou a très envie d'apprendre !"],
+        ["act", "Modou", "hop", 1.2, {"n": 2}],
+        ["line", "Modou", "Yaay ! Tey, man élève laa ! Dama jàng chanson bi !", "Maman ! Aujourd'hui, je suis élève ! J'ai appris la chanson !"],
+        ["line", "Yaay Fatou", "Ndax ? Woyal ma ko, kon !", "Ah oui ? Chante-la-moi, alors !"],
+        ["act", "Modou", "dance", 2.5],
+        ["line", "Modou", "Toogal, déglul… Hi hi, dama fatte !", "Toogal, déglul… Hi hi, j'ai oublié !", {"tts": "Toogal, déglul... [giggles] dama fatte !"}],
+        ["line", "Awa", "Ha ha ha ! Modou !", "Ha ha ha ! Modou !", {"tts": "[laughs] Ha ha ha ! Modou !"}],
+        ["act", "Yaay Fatou", "move", 1.6, {"x": -500}], ["act", "Modou", "move", 1.6, {"x": -300}],
+        ["wait", 1.8]
+      ]
+    },
+    {
+      "bg": "maison",
+      "cast": ["Mame Ndèye", "Awa", "Modou", "Papa", "Yaay Fatou"],
+      "events": [
+        ["wait", 0.8],
+        ["line", "Mame Ndèye", "Modou, naka la ékool demee ?", "Modou, comment s'est passée l'école ?"],
+        ["line", "Modou", "Baax na lool, Mame ! Léegi, man maîtresse laa !", "Très bien, Mame ! Maintenant, c'est moi la maîtresse !"],
+        ["act", "Modou", "move", 1.0, {"x": 1650}],
+        ["line", "Modou", "Papa, toogal ! Ñaata at nga am ?", "Papa, assieds-toi ! Tu as quel âge ?"],
+        ["act", "Papa", "hop", 2.0, {"n": 3}],
+        ["line", "Papa", "Wa… wa… hi hi !", "A… a… hi hi !", {"tts": "Wa... wa... [giggles]"}],
+        ["line", "Awa", "Ha ha ! Papa du jàng, Modou ! Dafa tuuti lool !", "Ha ha ! Papa ne peut pas apprendre, Modou ! Il est trop petit !", {"tts": "[laughs] Papa du jàng, Modou ! Dafa tuuti lool !"}],
+        ["sfx", "a sheep bleating loudly outside the door, cartoon style", "♪ Mbèèè ! ♪", 2.5],
+        ["act", "Awa", "hop", 0.8, {"n": 1}], ["act", "Modou", "hop", 0.8, {"n": 1}],
+        ["line", "Awa", "Lan la loolu ?!", "C'était quoi, ça ?!", {"tts": "[surprised] Lan la loolu ?!"}],
+        ["wait", 0.3],
+        ["line", "Narratrice", "Kan moo nekk ci buntu kër gi ? Dinañu ko gis ci prochain épisode bi !", "Qui est devant la porte ? On le verra dans le prochain épisode !", {"voice": "Narratrice"}],
+        ["wait", 1.6]
+      ]
+    }
+  ]
+}
