@@ -15,7 +15,19 @@ simple (ékool, nék, ngui, rétane). Phrases COURTES et faciles. Dans une quest
 seul l'enfant qui répond peut dire « 3 ans ». Chaque réplique a sa traduction française naturelle.
 Histoires drôles de la vie réelle, gags visuels, une chanson originale courte et répétitive (refrain facile).
 Pas de leçon de comptage, pas de vocabulaire « papa / maman ». Fin avec un petit suspense annoncé par la narratrice.
-Environ 30 à 40 répliques, réparties en 3 scènes. La chanson est jouée une fois au milieu (événement ["song"])."""
+Environ 30 à 40 répliques, réparties en 3 scènes. La chanson est jouée une fois au milieu (événement ["song"]).
+
+RÈGLES POUR FAIRE GRANDIR LA CHAÎNE (titres, description, miniature, Short) :
+- Les 20 premières secondes doivent accrocher : un gag ou une surprise dès la 1re réplique, pas de longue présentation.
+- « youtube.title » (60 à 80 caractères) : commence par l'action drôle ou surprenante + 1 emoji, puis une phrase courte en wolof,
+  puis « | Dessin animé en wolof pour enfants | Épisode N ». Exemple : « Un mouton dans la maison ! 🐑 Xar bi dafa dugg ! | Dessin animé en wolof pour enfants | Épisode 3 ».
+- « youtube.description » : 2 premières lignes = l'accroche (français puis wolof) avec une question qui donne envie de regarder ;
+  puis la chanson, les personnages, « Sous-titres en wolof et en français. », et 5 hashtags (#wolof #dessinanimé #enfants #senegal #chansonenfant).
+- « youtube.tags » : 15 à 20 tags, mélange français / wolof / anglais (wolof, dessin animé wolof, chanson wolof, Awa et Modou, xale yi,
+  Wolof cartoon for kids, Senegal cartoon, apprendre le wolof, + 4 à 6 mots du thème de l'épisode).
+- « thumbnail.text » : 2 lignes très courtes (2 à 3 mots chacune) qui montrent l'émotion ou la surprise, en wolof.
+- « short » : choisis le moment le plus drôle (8 à 12 répliques). « short.text » = 2 lignes courtes qui résument ce moment.
+  « short_youtube.title » doit décrire EXACTEMENT ce moment (le même que « short.text »), avec emoji, + « #wolof #shorts »."""
 
 
 def schema_example():

@@ -1,3 +1,4 @@
+import re
 """Monte un épisode complet à partir de son fichier JSON et des audios de make_audio.py.
 Usage : python render.py episodes/ep02.json build/ep02
 Sorties dans build/ep02 : episode.mp4, short.mp4, thumbnail.jpg, timings.json
@@ -252,9 +253,14 @@ def make_shorts(ep, build, timings):
                         "-map", "[v]", "-map", "1:a", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
                         "-c:a", "aac", "-b:a", "160k", "-af", f"loudnorm=I=-16:TP=-1.5,afade=t=out:st={dur - 1}:d=1", "-r", "30", out],
                        check=True, cwd=build)
-        wo = c["wo"].rstrip(" !?.…")
         emo = "🎵" if c["text"][0].startswith("♪") else "😂"
-        title = f"{wo[:45]} {emo} | {ep['title']} #wolof #shorts"
+        if n == 1 and ep.get("short_youtube", {}).get("title"):
+            title = ep["short_youtube"]["title"]
+        else:
+            wo = re.split(r"(?<=[!?.…])\s", c["wo"].strip())[0].rstrip(" ,")
+            if len(wo) > 48:
+                wo = wo[:48].rsplit(" ", 1)[0] + "…"
+            title = f"{wo} {emo} | {ep['title']} #wolof #shorts"
         meta.append(dict(file=out, title=title[:100],
                          description=f"Un moment de l'épisode {ep['number']} « {ep['title']} » 😄 Dessin animé en wolof pour enfants. "
                                      "Épisode complet sur la chaîne Xale Yi !\n#wolof #senegal #enfants #dessinanimé #shorts"))

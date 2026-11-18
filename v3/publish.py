@@ -17,7 +17,12 @@ def yt():
     return build("youtube", "v3", credentials=c, cache_discovery=False)
 
 
+SUB = "\n\n🔔 Abonne-toi pour voir la suite d'Awa et Modou : https://www.youtube.com/@wolof-kids?sub_confirmation=1"
+
+
 def upload(api, path, title, desc, tags, privacy, thumb=None):
+    if "sub_confirmation" not in desc:
+        desc = (desc + SUB)[:4900]
     body = {
         "snippet": {"title": title[:100], "description": desc, "tags": tags, "categoryId": "1",
                     "defaultLanguage": "fr", "defaultAudioLanguage": "wo"},
