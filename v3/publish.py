@@ -58,7 +58,16 @@ def main(ep_path, b):
     return {"video": vid, "short": sid, "privacy": privacy}
 
 
+def check():
+    """vérifie l'accès YouTube sans rien publier"""
+    ch = yt().channels().list(part="snippet", mine=True).execute()
+    for c in ch.get("items", []):
+        print("✅ accès YouTube OK – chaîne :", c["snippet"]["title"])
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "--check":
+        check(); sys.exit(0)
     r = main(sys.argv[1], sys.argv[2])
     if r:
         json.dump(r, open(sys.argv[2] + "/published.json", "w"))

@@ -29,6 +29,8 @@ def main():
     ep_path = f"episodes/{ep_id}.json"
     b = f"build/{ep_id}"
     print("🎬 épisode :", ep_id, flush=True)
+    if os.environ.get("YT_REFRESH_TOKEN"):
+        sh(sys.executable, "publish.py", "--check")
     sh(sys.executable, "make_audio.py", ep_path, b)
     sh(sys.executable, "render.py", ep_path, b)
     if os.environ.get("PUBLISH", "1") == "1":
