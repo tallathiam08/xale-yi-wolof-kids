@@ -1,0 +1,40 @@
+name: Xale Yi v3 – Shorts (3 par jour)
+
+on:
+  schedule:
+    # 3 Shorts par jour : 8h41, 13h41, 18h41 (heure de Dakar = UTC)
+    - cron: "41 8,13,18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: xale-v3
+  cancel-in-progress: false
+
+jobs:
+  short:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install google-api-python-client google-auth requests
+      - name: Publier le prochain Short
+        working-directory: v3
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: python post_short.py
+      - name: Enregistrer
+        if: always()
+        run: |
+          git config user.name "xale-yi-bot"
+          git config user.email "xale-yi-bot@users.noreply.github.com"
+          git add v3/state || true
+          git diff --cached --quiet || (git commit -m "Short publié" && git pull --rebase && git push)

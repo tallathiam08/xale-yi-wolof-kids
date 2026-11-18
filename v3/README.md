@@ -1,11 +1,12 @@
 # Xale Yi v3 – production automatique 2D
 
-Chaque lundi, mercredi, vendredi et dimanche, `.github/workflows/xale_v3_auto.yml` :
-1. prend le prochain épisode de `episodes/` non publié (sinon l'écrit avec Gemini, `write_episode.py`) ;
-2. génère les voix, la chanson et les bruitages avec ElevenLabs (`make_audio.py`) ;
-3. monte l'épisode, le Short vertical et la miniature (`render.py`, moteur `engine.py`) ;
-4. publie sur YouTube (`publish.py`) et note l'avancement dans `state/published.json`.
+- `xale_v3_auto.yml` (lundi, mercredi, vendredi, dimanche 10h17) : fabrique le prochain épisode
+  (l'écrit avec Gemini si la file `episodes/` est vide), le range dans une Release GitHub avec sa miniature
+  et ses Shorts, puis publie le plus ancien épisode prêt sur YouTube.
+- `xale_v3_shorts.yml` (8h41, 13h41, 18h41) : publie le prochain Short de la file.
+- `xale_v3_check.yml` : vérifie l'accès YouTube.
 
-Secrets GitHub : `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN`.
-Lancement manuel : onglet Actions → « Xale Yi v3 » → Run workflow (publish = 0 pour un essai sans publication).
-Personnages, voix et décors : `series.py` et `assets/`. Plan de saison : `season.md`.
+`config.json` : `publish_youtube` passe à `true` une fois l'audit de l'API YouTube accepté
+(avant, YouTube bloque en privé les vidéos envoyées par l'API). `max_built_waiting` limite la réserve d'épisodes prêts.
+
+Secrets : `ELEVENLABS_API_KEY`, `GEMINI_API_KEY`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN`.

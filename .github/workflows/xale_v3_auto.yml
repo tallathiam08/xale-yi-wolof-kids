@@ -52,6 +52,7 @@ jobs:
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           PUBLISH: ${{ github.event.inputs.publish || '1' }}
           PUBLISH_PRIVACY: ${{ vars.PUBLISH_PRIVACY || 'public' }}
+          GH_TOKEN: ${{ github.token }}
         run: python run.py ${{ github.event.inputs.episode }}
 
       - name: Enregistrer l'avancement (épisodes écrits / publiés)
@@ -60,7 +61,7 @@ jobs:
           git config user.name "xale-yi-bot"
           git config user.email "xale-yi-bot@users.noreply.github.com"
           git add v3/episodes v3/state || true
-          git diff --cached --quiet || (git commit -m "Épisode ${{ steps.run.outputs.episode }} : avancement" && git push)
+          git diff --cached --quiet || (git commit -m "Épisode ${{ steps.run.outputs.episode }} : avancement" && git pull --rebase && git push)
 
       - name: Garder les vidéos (7 jours)
         if: always()

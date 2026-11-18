@@ -1,0 +1,5 @@
+{
+  "publish_youtube": false,
+  "max_built_waiting": 4,
+  "shorts_per_episode": 6
+}

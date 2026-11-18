@@ -171,7 +171,9 @@ def main(ep_path, build):
             sc.cards = [(sc.dur - 1.9, sc.dur, E.title_card("À suivre…", "Ba beneen yoon !", (240, 120, 20), (60, 140, 220)))]
         out = f"{build}/{key}.mp4"
         d = render_scene(sc, out)
-        timings[key] = dict(start=t0, dur=d, lines=[(L["s"], L["e"]) for L in sc.lines])
+        timings[key] = dict(start=t0, dur=d, lines=[(L["s"], L["e"]) for L in sc.lines],
+                            wo=[L["wo"] for L in sc.lines], spk=[L["spk"] for L in sc.lines],
+                            songs=[(S["s"], S["e"]) for S in sc.songs])
         t0 += d
         parts.append(key)
         print(key, round(d, 2), flush=True)
@@ -185,34 +187,81 @@ def main(ep_path, build):
     run("ffmpeg", "-v", "error", "-y", "-i", "v.mp4", "-i", "a.wav", "-map", "0:v", "-map", "1:a", "-c:v", "copy",
         "-c:a", "aac", "-b:a", "192k", "-af", "loudnorm=I=-16:TP=-1.5", "-movflags", "+faststart", "-shortest", "episode.mp4")
     json.dump(timings, open(build + "/timings.json", "w"), indent=1)
-    make_short(ep, build, timings)
+    make_shorts(ep, build, timings)
     make_thumb(ep, build)
 
 
-def make_short(ep, build, timings):
-    sh = ep["short"]
-    T = timings[f"s{sh['scene']}"]
-    a = max(0, T["lines"][sh["from"]][0] - 0.4)
-    b = min(T["dur"], T["lines"][sh["to"]][1] + 0.6)
-    b = min(b, a + 58)
+def pick_clips(ep, timings, n_max=6):
+    """choisit jusqu'à n_max moments pour les Shorts : le moment choisi, la chanson, puis des gags."""
+    clips = []
+    def add(k, a, b, text, wo):
+        if b - a < 12:
+            return
+        for c in clips:
+            if c["scene"] == k and not (b <= c["a"] or a >= c["b"]):
+                return
+        clips.append(dict(scene=k, a=a, b=min(b, a + 55), text=text, wo=wo))
+    sh = ep.get("short")
+    if sh:
+        T = timings[f"s{sh['scene']}"]
+        add(f"s{sh['scene']}", max(0, T["lines"][sh["from"]][0] - 0.4), min(T["dur"], T["lines"][sh["to"]][1] + 0.6),
+            sh["text"], T["wo"][sh["from"]])
+    words = ep["title"].upper().split()
+    gen_text = [" ".join(words[:2]), " ".join(words[2:]) or f"ÉP. {ep['number']}"]
+    for k, T in timings.items():
+        if not k.startswith("s"):
+            continue
+        for (sa, se) in T["songs"]:
+            add(k, sa, min(se, sa + 45), ["♪ " + ep["song"]["title"].upper(), "WOY AK ÑUN !"], ep["song"]["lyrics"][0])
+    for k, T in timings.items():
+        if not k.startswith("s"):
+            continue
+        L = T["lines"]
+        i = 0
+        while i < len(L):
+            j = i
+            while j + 1 < len(L) and L[j + 1][1] - L[i][0] < 40:
+                j += 1
+            if L[j][1] - L[i][0] >= 15:
+                add(k, max(0, L[i][0] - 0.4), min(T["dur"], L[j][1] + 0.6), gen_text, T["wo"][i])
+            i = j + 1
+    return clips[:n_max]
+
+
+def make_shorts(ep, build, timings):
+    clips = pick_clips(ep, timings, int(os.environ.get("SHORTS_PER_EPISODE", "6")))
     F = E.FB
-    img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
-    f1 = ImageFont.truetype(F, 92); f2 = ImageFont.truetype(F, 46)
-    for t, y in zip(sh["text"], (250, 360)):
-        w = d.textlength(t, font=f1); d.text(((1080 - w) / 2, y), t, font=f1, fill=(255, 225, 40), stroke_width=9, stroke_fill=(60, 20, 40))
-    t = "Épisode complet sur la chaîne"
-    w = d.textlength(t, font=f2); d.rounded_rectangle([(1080 - w) / 2 - 30, 1500, (1080 + w) / 2 + 30, 1580], 36, fill=(230, 70, 140))
-    d.text(((1080 - w) / 2, 1512), t, font=f2, fill="white")
-    img.save(build + "/short_overlay.png")
-    k = f"s{sh['scene']}"
-    dur = b - a
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(dur), "-i", f"{k}.mp4", "-ss", str(a), "-t", str(dur),
-                    "-i", f"{k}.wav", "-i", "short_overlay.png", "-filter_complex",
-                    "[0:v]split[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.08[bg];[b]scale=1080:-2[fg];"
-                    f"[bg][fg]overlay=0:(H-h)/2+80[v1];[v1][2:v]overlay=0:0,fade=t=out:st={dur - 0.6}:d=0.6[v]",
-                    "-map", "[v]", "-map", "1:a", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
-                    "-c:a", "aac", "-b:a", "160k", "-af", f"loudnorm=I=-16:TP=-1.5,afade=t=out:st={dur - 1}:d=1", "-r", "30", "short.mp4"],
-                   check=True, cwd=build)
+    meta = []
+    for n, c in enumerate(clips, 1):
+        img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+        f1 = ImageFont.truetype(F, 88); f2 = ImageFont.truetype(F, 46)
+        for t, y in zip(c["text"], (250, 360)):
+            while d.textlength(t, font=f1) > 1000 and f1.size > 50:
+                f1 = ImageFont.truetype(F, f1.size - 6)
+            w = d.textlength(t, font=f1); d.text(((1080 - w) / 2, y), t, font=f1, fill=(255, 225, 40), stroke_width=9, stroke_fill=(60, 20, 40))
+        t = "Épisode complet sur la chaîne"
+        w = d.textlength(t, font=f2); d.rounded_rectangle([(1080 - w) / 2 - 30, 1500, (1080 + w) / 2 + 30, 1580], 36, fill=(230, 70, 140))
+        d.text(((1080 - w) / 2, 1512), t, font=f2, fill="white")
+        img.save(f"{build}/short_overlay_{n}.png")
+        a, dur = c["a"], c["b"] - c["a"]
+        out = f"short_{n:02d}.mp4"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(dur), "-i", f"{c['scene']}.mp4", "-ss", str(a), "-t", str(dur),
+                        "-i", f"{c['scene']}.wav", "-i", f"short_overlay_{n}.png", "-filter_complex",
+                        "[0:v]split[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.08[bg];[b]scale=1080:-2[fg];"
+                        f"[bg][fg]overlay=0:(H-h)/2+80[v1];[v1][2:v]overlay=0:0,fade=t=out:st={dur - 0.6}:d=0.6[v]",
+                        "-map", "[v]", "-map", "1:a", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+                        "-c:a", "aac", "-b:a", "160k", "-af", f"loudnorm=I=-16:TP=-1.5,afade=t=out:st={dur - 1}:d=1", "-r", "30", out],
+                       check=True, cwd=build)
+        wo = c["wo"].rstrip(" !?.…")
+        emo = "🎵" if c["text"][0].startswith("♪") else "😂"
+        title = f"{wo[:45]} {emo} | {ep['title']} #wolof #shorts"
+        meta.append(dict(file=out, title=title[:100],
+                         description=f"Un moment de l'épisode {ep['number']} « {ep['title']} » 😄 Dessin animé en wolof pour enfants. "
+                                     "Épisode complet sur la chaîne Xale Yi !\n#wolof #senegal #enfants #dessinanimé #shorts"))
+    if os.path.exists(f"{build}/short_01.mp4"):
+        import shutil; shutil.copy(f"{build}/short_01.mp4", f"{build}/short.mp4")
+    json.dump(meta, open(f"{build}/shorts.json", "w"), ensure_ascii=False, indent=1)
+    print("shorts :", len(meta))
 
 
 def make_thumb(ep, build):

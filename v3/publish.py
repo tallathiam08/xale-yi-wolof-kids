@@ -51,11 +51,20 @@ def main(ep_path, b):
     y = ep["youtube"]
     vid = upload(api, f"{b}/episode.mp4", y["title"], y["description"], y["tags"], privacy, f"{b}/thumbnail.jpg")
     print("épisode :", f"https://youtu.be/{vid}")
-    s = ep.get("short_youtube", {})
-    sid = upload(api, f"{b}/short.mp4", s.get("title", ep["title"] + " #shorts"),
-                 s.get("description", "") + f"\n\nÉpisode complet : https://youtu.be/{vid}", y["tags"][:10], privacy)
-    print("short :", f"https://youtu.be/{sid}")
+    sid = None
+    if os.path.exists(f"{b}/short_01.mp4"):
+        meta = json.load(open(f"{b}/shorts.json", encoding="utf-8"))[0] if os.path.exists(f"{b}/shorts.json") else {}
+        s = ep.get("short_youtube", {})
+        sid = upload(api, f"{b}/short_01.mp4", s.get("title", meta.get("title", ep["title"] + " #shorts")),
+                     s.get("description", meta.get("description", "")) + f"\n\nÉpisode complet : https://youtu.be/{vid}",
+                     y["tags"][:10], privacy)
+        print("short :", f"https://youtu.be/{sid}")
     return {"video": vid, "short": sid, "privacy": privacy}
+
+
+def post_short(path, title, desc, tags):
+    privacy = os.environ.get("PUBLISH_PRIVACY", "public")
+    return upload(yt(), path, title, desc, tags, privacy)
 
 
 def check():
