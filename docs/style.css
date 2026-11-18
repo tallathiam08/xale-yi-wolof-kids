@@ -1,0 +1,8 @@
+body{font-family:Helvetica,Arial,sans-serif;max-width:780px;margin:0 auto;padding:0 20px 40px;line-height:1.6;color:#222}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #eee;margin-bottom:24px}
+.brand{font-weight:bold;font-size:22px;color:#e6468c}
+nav a{margin-left:16px;color:#1a5fb4;text-decoration:none}
+.yt{display:inline-flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:8px;padding:6px 12px;font-size:14px}
+.yt svg{width:28px;height:20px}
+h2{margin-top:28px}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid #eee;font-size:14px}
