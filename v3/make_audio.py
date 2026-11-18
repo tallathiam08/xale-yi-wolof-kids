@@ -39,24 +39,26 @@ def voice_ids():
     return ids
 
 
-def pick_model():
+def pick_model(test_voice):
     want = os.environ.get("ELEVEN_MODEL")
     if want:
         return want
-    r = requests.get(API + "/models", headers=H, timeout=60)
-    r.raise_for_status()
-    names = [m["model_id"] for m in r.json() if m.get("can_do_text_to_speech")]
-    for pref in ("eleven_v4", "eleven_v3", "eleven_multilingual_v2"):
-        if pref in names:
-            return pref
-    return names[0]
+    # la clé n'a pas forcément le droit de lister les modèles : on essaie directement
+    for m in ("eleven_v4", "eleven_v3", "eleven_multilingual_v2"):
+        r = requests.post(f"{API}/text-to-speech/{test_voice}?output_format=mp3_44100_128",
+                          headers={**H, "Content-Type": "application/json"},
+                          json={"text": "Waaw.", "model_id": m}, timeout=120)
+        if r.status_code == 200:
+            return m
+        print("modèle", m, "refusé :", r.status_code, r.text[:200])
+    raise SystemExit("aucun modèle ElevenLabs utilisable (vérifie les droits de la clé : Text to Speech)")
 
 
 def main(ep_path, out):
     ep = json.load(open(ep_path, encoding="utf-8"))
     os.makedirs(out, exist_ok=True)
     ids = voice_ids()
-    model = pick_model()
+    model = pick_model(ids["Awa"])
     print("modèle TTS :", model)
     open(out + "/model.txt", "w").write(model)
     n = 0
