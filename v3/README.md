@@ -1,6 +1,6 @@
 # Xale Yi v3 – production automatique 2D
 
-Chaque mardi et vendredi, `.github/workflows/xale_v3_auto.yml` :
+Chaque lundi, mercredi, vendredi et dimanche, `.github/workflows/xale_v3_auto.yml` :
 1. prend le prochain épisode de `episodes/` non publié (sinon l'écrit avec Gemini, `write_episode.py`) ;
 2. génère les voix, la chanson et les bruitages avec ElevenLabs (`make_audio.py`) ;
 3. monte l'épisode, le Short vertical et la miniature (`render.py`, moteur `engine.py`) ;

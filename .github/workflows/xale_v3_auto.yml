@@ -2,8 +2,8 @@ name: Xale Yi v3 – épisode automatique
 
 on:
   schedule:
-    # mardi et vendredi à 10h (heure de Dakar = UTC)
-    - cron: "17 10 * * 2,5"
+    # 4 épisodes par semaine : lundi, mercredi, vendredi, dimanche à 10h17 (heure de Dakar = UTC)
+    - cron: "17 10 * * 0,1,3,5"
   workflow_dispatch:
     inputs:
       episode:
