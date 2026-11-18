@@ -30,7 +30,10 @@ def main():
     b = f"build/{ep_id}"
     print("🎬 épisode :", ep_id, flush=True)
     if os.environ.get("YT_REFRESH_TOKEN"):
-        sh(sys.executable, "publish.py", "--check")
+        r = subprocess.run([sys.executable, "publish.py", "--check"], cwd=HERE)
+        if r.returncode != 0:
+            print("⚠️ Accès YouTube refusé : la vidéo sera fabriquée mais pas publiée.", flush=True)
+            os.environ["PUBLISH"] = "0"
     sh(sys.executable, "make_audio.py", ep_path, b)
     sh(sys.executable, "render.py", ep_path, b)
     if os.environ.get("PUBLISH", "1") == "1":
