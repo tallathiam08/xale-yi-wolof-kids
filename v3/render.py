@@ -258,6 +258,8 @@ def make_shorts(ep, build, timings):
             title = ep["short_youtube"]["title"]
         else:
             wo = re.split(r"(?<=[!?.…])\s", c["wo"].strip())[0].rstrip(" ,")
+            if wo.startswith("♪") or len(re.findall(r"[A-Za-zÀ-ÿËëÑñ]{3,}", wo)) < 2 or "-" in wo.split(" ")[0]:
+                wo = ep.get("subtitle") or ep["title"]  # bruitage : on prend le sous-titre de l'épisode
             if len(wo) > 48:
                 wo = wo[:48].rsplit(" ", 1)[0] + "…"
             title = f"{wo} {emo} | {ep['title']} #wolof #shorts"
