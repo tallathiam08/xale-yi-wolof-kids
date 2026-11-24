@@ -38,28 +38,95 @@ def ask(prompt):
     key = os.environ["GEMINI_API_KEY"]
     for model in MODELS:
         for k in range(3):
-            r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}",
-                              json={"contents": [{"parts": [{"text": prompt}]}],
-                                    "generationConfig": {"responseMimeType": "application/json", "temperature": 0.9}},
-                              timeout=300)
+            try:
+                r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}",
+                                  json={"contents": [{"parts": [{"text": prompt}]}],
+                                        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.8}},
+                                  timeout=240)
+            except requests.RequestException as e:  # délai dépassé, coupure réseau : on réessaie
+                print(model, "erreur réseau :", repr(e)[:150]); time.sleep(15 * (k + 1)); continue
             if r.status_code == 200:
                 try:
                     return r.json()["candidates"][0]["content"]["parts"][0]["text"]
                 except Exception:
                     pass
             print(model, r.status_code, r.text[:200])
-            time.sleep(10 * (k + 1))
+            time.sleep(15 * (k + 1))
     raise SystemExit("Gemini indisponible")
 
 
+ACTS = ("hop", "shake", "dance", "walk", "move", "hide", "show", "pop", "flip")
+GROUP = ("Élèves", "Un élève", "Narratrice")
+
+
+def repair(ep):
+    """Corrige automatiquement les petites erreurs de Gemini au lieu de rejeter tout l'épisode."""
+    ep["scenes"] = [sc for sc in ep.get("scenes", []) if sc.get("events")][:4]
+    for sc in ep["scenes"]:
+        if sc.get("bg") not in BGS:
+            sc["bg"] = "maison"
+        cast = [c for c in sc.get("cast", []) if (c if isinstance(c, str) else c.get("name")) in CHARS]
+        speakers = []
+        for ev in sc["events"]:
+            if ev and ev[0] == "line" and ev[1] in CHARS and ev[1] not in speakers:
+                speakers.append(ev[1])
+        names = [c if isinstance(c, str) else c["name"] for c in cast]
+        for sp in speakers:  # un personnage qui parle doit être dans la scène
+            if sp not in names:
+                cast.append(sp); names.append(sp)
+        while len(cast) > 5:  # on retire d'abord ceux qui ne parlent pas
+            idx = next((i for i, nm in enumerate(names) if nm not in speakers), len(cast) - 1)
+            cast.pop(idx); names.pop(idx)
+        sc["cast"] = cast
+        evs = []
+        for ev in sc["events"]:
+            if not ev:
+                continue
+            if ev[0] == "line":
+                if len(ev) < 4 or not isinstance(ev[2], str) or not isinstance(ev[3], str):
+                    continue
+                if ev[1] not in names and ev[1] not in GROUP:
+                    continue
+            elif ev[0] == "act":
+                if len(ev) < 3 or ev[1] not in names or ev[2] not in ACTS:
+                    continue
+            elif ev[0] not in ("wait", "song", "sfx"):
+                continue
+            evs.append(ev)
+        sc["events"] = evs
+    songs = [(i, j) for i, sc in enumerate(ep["scenes"]) for j, ev in enumerate(sc["events"]) if ev[0] == "song"]
+    for i, j in reversed(songs[1:]):
+        ep["scenes"][i]["events"].pop(j)
+    if not songs and ep["scenes"]:
+        mid = ep["scenes"][len(ep["scenes"]) // 2]["events"]
+        mid.insert(len(mid) // 2, ["song"])
+    y = ep.setdefault("youtube", {})
+    y.setdefault("title", f"{ep.get('title', 'Xale Yi')} | Dessin animé en wolof pour enfants | Épisode {ep.get('number', '')}")
+    y.setdefault("description", ep.get("title", ""))
+    y.setdefault("tags", ["wolof", "dessin animé wolof", "xale yi"])
+    th = ep.setdefault("thumbnail", {})
+    th.setdefault("text", ep.get("title", "XALE YI").upper().split()[:3] and [" ".join(ep.get("title", "XALE YI").upper().split()[:2]), f"ÉP. {ep.get('number', '')}"])
+    sh = ep.get("short")
+    if sh and ep["scenes"]:
+        sh["scene"] = min(max(int(sh.get("scene", 0)), 0), len(ep["scenes"]) - 1)
+        nl = sum(e[0] == "line" for e in ep["scenes"][sh["scene"]]["events"])
+        if nl == 0:
+            ep.pop("short")
+        else:
+            sh["from"] = min(max(int(sh.get("from", 0)), 0), nl - 1)
+            sh["to"] = min(max(int(sh.get("to", nl - 1)), sh["from"]), nl - 1)
+            sh.setdefault("text", th["text"])
+    return ep
+
+
 def validate(ep):
-    assert ep["scenes"] and len(ep["scenes"]) <= 4
+    assert ep["scenes"] and len(ep["scenes"]) <= 4, "nombre de scènes"
     n = 0
     for sc in ep["scenes"]:
         assert sc["bg"] in BGS, sc["bg"]
         names = [c if isinstance(c, str) else c["name"] for c in sc["cast"]]
         assert all(x in CHARS for x in names), names
-        assert len(names) <= 5
+        assert len(names) <= 5, "trop de personnages"
         for ev in sc["events"]:
             if ev[0] == "line":
                 n += 1
@@ -71,11 +138,13 @@ def validate(ep):
             elif ev[0] not in ("wait", "song", "sfx"):
                 raise AssertionError(ev)
     assert 18 <= n <= 50, n
-    assert sum(ev[0] == "song" for sc in ep["scenes"] for ev in sc["events"]) == 1
-    assert ep["song"]["lyrics"] and ep["youtube"]["title"] and ep["thumbnail"]["text"]
-    sh = ep["short"]
+    assert sum(ev[0] == "song" for sc in ep["scenes"] for ev in sc["events"]) == 1, "une seule chanson"
+    assert ep["song"]["lyrics"] and ep["youtube"]["title"] and ep["thumbnail"]["text"], "chanson / titre / miniature"
+    sh = ep.get("short")
+    if not sh:
+        return
     lines = [e for e in ep["scenes"][sh["scene"]]["events"] if e[0] == "line"]
-    assert 0 <= sh["from"] <= sh["to"] < len(lines)
+    assert 0 <= sh["from"] <= sh["to"] < len(lines), "moment du Short"
 
 
 def main(num):
@@ -100,19 +169,22 @@ Balises d'émotion possibles dans "tts" : [laughs], [giggles], [whispers], [surp
 Écris l'épisode {num} (« number »: {num}, « id »: "ep{num:02d}") en JSON, EXACTEMENT au même format que cet exemple :
 {schema_example()}
 Réponds uniquement avec le JSON."""
-    for k in range(3):
-        txt = ask(prompt)
+    err = ""
+    for k in range(6):
+        txt = ask(prompt + (f"\n\nATTENTION, ta réponse précédente était invalide ({err}). Corrige ce point." if err else ""))
         txt = re.sub(r"^```(json)?|```$", "", txt.strip()).strip()
         try:
             ep = json.loads(txt)
             ep["number"], ep["id"] = num, f"ep{num:02d}"
+            repair(ep)
             validate(ep)
             out = f"{HERE}/episodes/ep{num:02d}.json"
             json.dump(ep, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
             print("écrit :", out, "-", ep["title"])
             return out
         except Exception as e:
-            print("épisode invalide, nouvel essai :", repr(e)[:300])
+            err = repr(e)[:200]
+            print("épisode invalide, nouvel essai :", err)
     raise SystemExit("impossible d'écrire un épisode valide")
 
 
