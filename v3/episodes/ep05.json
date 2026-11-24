@@ -1,0 +1,380 @@
+{
+ "id": "ep05",
+ "number": 5,
+ "title": "Coupure de courant",
+ "subtitle": "Courant bi dem na !",
+ "youtube": {
+  "title": "Tout est noir ! 🔦 Courant bi dem na ! | Dessin animé en wolof pour enfants | Épisode 5",
+  "description": "Le soir, plus d'électricité dans la maison ! 🔦 Modou se cache, Papa a peur, Baay cherche la lampe… et Mame a une idée.\nCourant bi dem na ! 😂 Kan moo ragal lëndëm ?\n\n🎵 Nouvelle chanson : « Leer gi, leer gi » – chante avec Awa et Modou !\n\n👨‍👩‍👧‍👦 Les personnages : Awa (5 ans), Modou (3 ans), bébé Papa, Yaay Fatou, Baay Ibou, Mame Ndèye et Maîtresse Sokhna.\n\n📺 De nouveaux épisodes chaque semaine : des histoires drôles de la vie de tous les jours et des chansons en wolof.\n👉 Abonne-toi pour ne pas rater la suite !\n\nSous-titres en wolof et en français.\n\n#wolof #dessinanimé #enfants #senegal #chansonenfant",
+  "tags": [
+   "wolof",
+   "dessin animé wolof",
+   "chanson wolof",
+   "chanson enfant wolof",
+   "dessin animé sénégalais",
+   "enfants sénégal",
+   "comptine wolof",
+   "Awa et Modou",
+   "kids wolof",
+   "Senegal cartoon",
+   "Wolof cartoon for kids",
+   "Wolof songs for kids",
+   "apprendre le wolof",
+   "xale yi",
+   "dessin animé africain",
+   "coupure de courant",
+   "lampe",
+   "nuit",
+   "peur du noir"
+  ]
+ },
+ "short_youtube": {
+  "title": "Man laa fantôme bi ! 👻 Modou dans le noir 😂 #wolof #shorts",
+  "description": "Modou fantôme bi ! 😂 Épisode complet sur la chaîne ! #wolof #senegal #enfants"
+ },
+ "thumbnail": {
+  "bg": "maison",
+  "chars": [
+   "Modou",
+   "Papa"
+  ],
+  "text": [
+   "COURANT BI",
+   "DEM NA !"
+  ]
+ },
+ "short": {
+  "scene": 0,
+  "from": 3,
+  "to": 7,
+  "text": [
+   "MODOU",
+   "FANTÔME BI !"
+  ]
+ },
+ "song": {
+  "title": "Leer gi, leer gi",
+  "seconds": 60,
+  "lyrics": [
+   "Leer gi, leer gi, ñëwal, ñëwal !",
+   "Lëndëm gi, bul nu ragal !",
+   "Ñun ñépp ñu ngi fii, ñu ngi woy !",
+   "Leer gi, leer gi, ñëwal, ñëwal !",
+   "Biddiw yi ci asamaan, ñu ngi leer !",
+   "Leer gi, leer gi… waaw !"
+  ]
+ },
+ "outro_bg": "maison",
+ "scenes": [
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Baay Ibou",
+    "Yaay Fatou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.8
+    ],
+    [
+     "line",
+     "Papa",
+     "Wa… waa… waaa !",
+     "A… aa… ouiiin !",
+     {
+      "tts": "Wa... waa... waaa !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Papa, bul jooy. Yaay a ngi fii.",
+     "Papa, ne pleure pas. Maman est là."
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Ana lampe bi ? Kan moo yor lampe bi ?",
+     "Où est la lampe ? Qui a la lampe ?"
+    ],
+    [
+     "sfx",
+     "someone bumps into a chair in the dark, cartoon bonk",
+     "Bonk !",
+     1.2
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "shake",
+     1.0
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Aïe ! Kan moo teg chaise bi fii ?",
+     "Aïe ! Qui a mis la chaise ici ?"
+    ],
+    [
+     "line",
+     "Modou",
+     "Hi hi hi…",
+     "Hi hi hi…",
+     {
+      "tts": "[giggles] Hi hi hi..."
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Modou ! Yow nga ? Fan nga nekk ?",
+     "Modou ! C'est toi ? Où es-tu ?"
+    ],
+    [
+     "line",
+     "Modou",
+     "Man laa fantôme bi ! Wouuuh !",
+     "C'est moi le fantôme ! Wouuuh !",
+     {
+      "tts": "[whispers] Man laa fantôme bi ! Wouuuh !"
+     }
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     1.4,
+     {
+      "n": 2
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Ha ha ! Fantôme bu tuuti tuuti !",
+     "Ha ha ! Un tout petit fantôme !",
+     {
+      "tts": "[laughs] Ha ha ! Fantôme bu tuuti tuuti !"
+     }
+    ],
+    [
+     "wait",
+     0.5
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye",
+    "Baay Ibou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.6
+    ],
+    [
+     "sfx",
+     "a match is struck and an oil lamp lights up with a soft glow",
+     "Tchik !",
+     1.4
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Lampe bi a ngi. Xale yi, toogleen ci sama wet.",
+     "Voilà la lampe. Les enfants, asseyez-vous à côté de moi."
+    ],
+    [
+     "line",
+     "Papa",
+     "Hi hi ! Leer !",
+     "Hi hi ! De la lumière !",
+     {
+      "tts": "[giggles] Hi hi ! Leer !"
+     }
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Bu lëndëm dikkee, danuy woy. Woy mooy dàq ragal.",
+     "Quand le noir arrive, on chante. La chanson chasse la peur."
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Waaw, Mame ! Ñu woy ñépp !",
+     "Oui, Mame ! Chantons tous !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Man, duma ragal ! Fantôme laa !",
+     "Moi, je n'ai pas peur ! Je suis un fantôme !"
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Fantôme bu xiif, kon. Waxtu reer la !",
+     "Un fantôme qui a faim, alors. C'est l'heure du dîner !",
+     {
+      "tts": "[laughs] Fantôme bu xiif, kon. Waxtu reer la !"
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Modou",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Papa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "dance",
+     61
+    ],
+    [
+     "song"
+    ],
+    [
+     "line",
+     "Awa",
+     "Neex na lool ! Dama bëgg courant bi dem bés bu nekk !",
+     "C'était trop bien ! Je veux une coupure tous les jours !",
+     {
+      "tts": "[laughs] Neex na lool ! Dama bëgg courant bi dem bés bu nekk !"
+     }
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Ha ha ! Awa, yow dangay bëgg woy rekk !",
+     "Ha ha ! Awa, toi tu veux juste chanter !",
+     {
+      "tts": "[laughs] Ha ha ! Awa, yow dangay bëgg woy rekk !"
+     }
+    ],
+    [
+     "wait",
+     0.4
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye",
+    "Yaay Fatou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.5
+    ],
+    [
+     "line",
+     "Modou",
+     "Mame, nettali nu léeb !",
+     "Mame, raconte-nous un conte !"
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Léeb ? Tey, dafa guddi. Dangeen wara nelaw.",
+     "Un conte ? Il est tard ce soir. Vous devez dormir."
+    ],
+    [
+     "line",
+     "Awa",
+     "Déedéet Mame ! Benn rekk ! Benn tuuti !",
+     "Non Mame ! Un seul ! Un tout petit !"
+    ],
+    [
+     "sfx",
+     "electricity comes back, lights and a fan switch on with a hum",
+     "Vrrr… klik !",
+     1.4
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     1.0,
+     {
+      "n": 2
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Courant bi dellusi na ! Léegi, ñépp ci lal bi !",
+     "L'électricité est revenue ! Maintenant, tout le monde au lit !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Ooh… courant bi dafa gaaw lool…",
+     "Ooh… l'électricité est revenue trop vite…",
+     {
+      "tts": "[yawns] Ooh... courant bi dafa gaaw lool..."
+     }
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Ëllëg, dinaa leen nettali léeb bu Leuk ak Bouki.",
+     "Demain, je vous raconterai le conte de Leuk et Bouki."
+    ],
+    [
+     "line",
+     "Awa",
+     "Youpi !",
+     "Youpi !",
+     {
+      "tts": "[laughs] Youpi !"
+     }
+    ],
+    [
+     "wait",
+     0.3
+    ],
+    [
+     "line",
+     "Narratrice",
+     "Lan la Leuk ak Bouki di def ? Dinañu ko xam ci prochain épisode bi !",
+     "Que vont faire Leuk et Bouki ? On le saura dans le prochain épisode !",
+     {
+      "voice": "Narratrice"
+     }
+    ],
+    [
+     "wait",
+     1.6
+    ]
+   ]
+  }
+ ]
+}

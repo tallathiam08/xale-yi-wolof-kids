@@ -1,0 +1,380 @@
+{
+ "id": "ep06",
+ "number": 6,
+ "title": "Les contes de Mame",
+ "subtitle": "Leuk ak Bouki",
+ "youtube": {
+  "title": "Leuk le lièvre et Bouki l'hyène ! 🐰 Léeb bu Mame | Dessin animé en wolof pour enfants | Épisode 6",
+  "description": "Mame Ndèye raconte le conte de Leuk le lièvre et Bouki l'hyène… et Awa et Modou jouent les personnages ! 🐰 Qui sera le plus malin ?\nLéebóon ! Lippoon ! Mame mi ngi nettali léeb bu Leuk ak Bouki 😄\n\n🎵 Nouvelle chanson : « Leuk ak Bouki » – chante avec Awa et Modou !\n\n👨‍👩‍👧‍👦 Les personnages : Awa (5 ans), Modou (3 ans), bébé Papa, Yaay Fatou, Baay Ibou, Mame Ndèye et Maîtresse Sokhna.\n\n📺 De nouveaux épisodes chaque semaine : des histoires drôles de la vie de tous les jours et des chansons en wolof.\n👉 Abonne-toi pour ne pas rater la suite !\n\nSous-titres en wolof et en français.\n\n#wolof #dessinanimé #enfants #senegal #chansonenfant",
+  "tags": [
+   "wolof",
+   "dessin animé wolof",
+   "chanson wolof",
+   "chanson enfant wolof",
+   "dessin animé sénégalais",
+   "enfants sénégal",
+   "comptine wolof",
+   "Awa et Modou",
+   "kids wolof",
+   "Senegal cartoon",
+   "Wolof cartoon for kids",
+   "Wolof songs for kids",
+   "apprendre le wolof",
+   "xale yi",
+   "dessin animé africain",
+   "conte africain",
+   "Leuk le lièvre",
+   "Bouki l'hyène",
+   "léeb",
+   "contes wolof"
+  ]
+ },
+ "short_youtube": {
+  "title": "Du lait dans le ciel ?! 🐰 Leuk trompe Bouki 😂 #wolof #shorts",
+  "description": "Meew ci asamaan ?! 😂 Épisode complet sur la chaîne ! #wolof #senegal #enfants"
+ },
+ "thumbnail": {
+  "bg": "maison",
+  "chars": [
+   "Mame Ndèye",
+   "Modou"
+  ],
+  "text": [
+   "LEUK AK",
+   "BOUKI !"
+  ]
+ },
+ "short": {
+  "scene": 1,
+  "from": 0,
+  "to": 5,
+  "text": [
+   "MEEW CI",
+   "ASAMAAN ?!"
+  ]
+ },
+ "song": {
+  "title": "Leuk ak Bouki",
+  "seconds": 60,
+  "lyrics": [
+   "Leuk dafa gaaw, Leuk dafa xelu !",
+   "Bouki dafa xiif, xiif, xiif !",
+   "Léebóon ! Lippoon !",
+   "Leuk dafa gaaw, Leuk dafa xelu !",
+   "Bouki dafa lekk, lekk, lekk !",
+   "Léebóon ! Lippoon… ha ha ha !"
+  ]
+ },
+ "outro_bg": "maison",
+ "scenes": [
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye"
+   ],
+   "events": [
+    [
+     "wait",
+     0.8
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Léebóon !",
+     "Il était une fois !"
+    ],
+    [
+     "line",
+     "Awa",
+     "Lippoon !",
+     "On écoute !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Lippoon ! Lippoon !",
+     "On écoute ! On écoute !",
+     {
+      "tts": "[giggles] Lippoon ! Lippoon !"
+     }
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Benn bés, Leuk le lièvre dafa am benn bol bu mag bu ñam.",
+     "Un jour, Leuk le lièvre avait un grand bol de nourriture."
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Te Bouki l'hyène, mi ngi xiif lool, lool !",
+     "Et Bouki l'hyène avait très, très faim !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Man laa Bouki ! Dama xiif ! Grrr !",
+     "C'est moi Bouki ! J'ai faim ! Grrr !",
+     {
+      "tts": "[laughs] Man laa Bouki ! Dama xiif ! Grrr !"
+     }
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     1.4,
+     {
+      "n": 3
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Kon man laa Leuk ! Dama gaaw te dama xelu !",
+     "Alors moi, je suis Leuk ! Je suis rapide et maline !",
+     {
+      "tts": "[proudly] Kon man laa Leuk ! Dama gaaw te dama xelu !"
+     }
+    ],
+    [
+     "line",
+     "Papa",
+     "Hi hi ! Grrr !",
+     "Hi hi ! Grrr !",
+     {
+      "tts": "[giggles] Hi hi ! Grrr !"
+     }
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Papa itam bëgg na nekk Bouki ! Ñaari Bouki ci kër gi !",
+     "Papa aussi veut être Bouki ! Deux Bouki dans la maison !",
+     {
+      "tts": "[laughs] Papa itam bëgg na nekk Bouki ! Ñaari Bouki ci kër gi !"
+     }
+    ],
+    [
+     "wait",
+     0.5
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye",
+    "Yaay Fatou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.6
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Bouki ne : Leuk, may ma sa bol bi, walla dinaa la lekk !",
+     "Bouki dit : Leuk, donne-moi ton bol, sinon je te mange !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Grrr ! May ma bol bi !",
+     "Grrr ! Donne-moi le bol !",
+     {
+      "tts": "Grrr ! May ma bol bi !"
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Bouki, seetal ca kaw ! Am na meew ci asamaan !",
+     "Bouki, regarde là-haut ! Il y a du lait dans le ciel !"
+    ],
+    [
+     "act",
+     "Modou",
+     "shake",
+     1.0
+    ],
+    [
+     "line",
+     "Modou",
+     "Fan ? Fan ? Man duma gis dara !",
+     "Où ? Où ? Moi je ne vois rien !"
+    ],
+    [
+     "act",
+     "Awa",
+     "move",
+     1.0,
+     {
+      "x": 2300
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Ha ha ! Leuk daw na ak bol bi !",
+     "Ha ha ! Leuk s'est enfui avec le bol !",
+     {
+      "tts": "[laughs] Ha ha ! Leuk daw na ak bol bi !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Bouki, yow dangay ñàkk xel ba tey !",
+     "Bouki, tu manques toujours de jugeote !",
+     {
+      "tts": "[laughs] Bouki, yow dangay ñàkk xel ba tey !"
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Modou",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Papa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Mame Ndèye",
+     "dance",
+     61
+    ],
+    [
+     "song"
+    ],
+    [
+     "wait",
+     0.4
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye",
+    "Yaay Fatou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.5
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Léeb bi, foofu la doxe, mu tàbbi ci géej gi.",
+     "Le conte s'est promené par là, et il est tombé dans la mer."
+    ],
+    [
+     "line",
+     "Modou",
+     "Waaye Mame… Bouki dafa xiif ba léegi ?",
+     "Mais Mame… Bouki a encore faim ?"
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Waaw, sama doom. Bouki dafa xiif ba fàww !",
+     "Oui, mon enfant. Bouki a faim pour toujours !",
+     {
+      "tts": "[laughs] Waaw, sama doom. Bouki dafa xiif ba fàww !"
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Man itam dama xiif ! Yaay, ana bol bi ?",
+     "Moi aussi j'ai faim ! Maman, où est le bol ?"
+    ],
+    [
+     "line",
+     "Awa",
+     "Ha ha ! Modou dafa nekk Bouki dëgg !",
+     "Ha ha ! Modou est un vrai Bouki !",
+     {
+      "tts": "[laughs] Ha ha ! Modou dafa nekk Bouki dëgg !"
+     }
+    ],
+    [
+     "act",
+     "Papa",
+     "hop",
+     1.6,
+     {
+      "n": 2
+     }
+    ],
+    [
+     "line",
+     "Papa",
+     "Wa… wa… !",
+     "A… a… !",
+     {
+      "tts": "Wa... wa... !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Xoolleen Papa ! Mu ngi bëgg taxaw !",
+     "Regardez Papa ! Il essaie de se mettre debout !",
+     {
+      "tts": "[surprised] Xoolleen Papa ! Mu ngi bëgg taxaw !"
+     }
+    ],
+    [
+     "act",
+     "Papa",
+     "shake",
+     1.4,
+     {
+      "a": 5
+     }
+    ],
+    [
+     "wait",
+     0.3
+    ],
+    [
+     "line",
+     "Narratrice",
+     "Ndax Papa dina dox ? Dinañu ko gis ci prochain épisode bi !",
+     "Est-ce que Papa va marcher ? On le verra dans le prochain épisode !",
+     {
+      "voice": "Narratrice"
+     }
+    ],
+    [
+     "wait",
+     1.6
+    ]
+   ]
+  }
+ ]
+}

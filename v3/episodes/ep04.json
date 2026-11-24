@@ -1,0 +1,422 @@
+{
+ "id": "ep04",
+ "number": 4,
+ "title": "Le mouton du voisin (2)",
+ "subtitle": "Delloo ko boroom !",
+ "youtube": {
+  "title": "Course-poursuite avec le mouton ! 🐑💨 Xar bi dafa daw ! | Dessin animé en wolof pour enfants | Épisode 4",
+  "description": "Toute la famille veut rendre le mouton à Tonton Ablaye… mais le mouton s'échappe dans la rue ! 🐑💨 Qui va réussir à l'attraper ?\nXar bi dafa daw ci mbedd mi ! 😂 Kan moo koy jàpp ?\n\n🎵 Nouvelle chanson : « Daw, daw, daw ! » – chante avec Awa et Modou !\n\n👨‍👩‍👧‍👦 Les personnages : Awa (5 ans), Modou (3 ans), bébé Papa, Yaay Fatou, Baay Ibou, Mame Ndèye et Maîtresse Sokhna.\n\n📺 De nouveaux épisodes chaque semaine : des histoires drôles de la vie de tous les jours et des chansons en wolof.\n👉 Abonne-toi pour ne pas rater la suite !\n\nSous-titres en wolof et en français.\n\n#wolof #dessinanimé #enfants #senegal #chansonenfant",
+  "tags": [
+   "wolof",
+   "dessin animé wolof",
+   "chanson wolof",
+   "chanson enfant wolof",
+   "dessin animé sénégalais",
+   "enfants sénégal",
+   "comptine wolof",
+   "Awa et Modou",
+   "kids wolof",
+   "Senegal cartoon",
+   "Wolof cartoon for kids",
+   "Wolof songs for kids",
+   "apprendre le wolof",
+   "xale yi",
+   "dessin animé africain",
+   "mouton",
+   "xar",
+   "course",
+   "rue",
+   "Dakar"
+  ]
+ },
+ "short_youtube": {
+  "title": "Baay le champion… tombe ! Xar bi dafa daw 🐑💨😂 #wolof #shorts",
+  "description": "Baay daanu na ! 😂 Épisode complet sur la chaîne ! #wolof #senegal #enfants"
+ },
+ "thumbnail": {
+  "bg": "rue",
+  "chars": [
+   "Baay Ibou",
+   "Modou"
+  ],
+  "text": [
+   "XAR BI",
+   "DAFA DAW !"
+  ]
+ },
+ "short": {
+  "scene": 1,
+  "from": 2,
+  "to": 5,
+  "text": [
+   "BAAY",
+   "DAANU NA !"
+  ]
+ },
+ "song": {
+  "title": "Daw, daw, daw !",
+  "seconds": 60,
+  "lyrics": [
+   "Daw, daw, daw, xar bi dafa daw !",
+   "Baay dafa daw, Modou dafa daw !",
+   "Daw, daw, daw, fii ak fale !",
+   "Jàppal ko, jàppal ko, waaw !",
+   "Daw, daw, daw… mbèè !",
+   "Ñun ñépp ñu ngiy daw !"
+  ]
+ },
+ "outro_bg": "rue",
+ "scenes": [
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Yaay Fatou",
+    "Baay Ibou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.8
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Modou, xar bi du sa xar. Fàww nga delloo ko boroom.",
+     "Modou, ce mouton n'est pas à toi. Il faut le rendre à son propriétaire."
+    ],
+    [
+     "act",
+     "Modou",
+     "shake",
+     1.2
+    ],
+    [
+     "line",
+     "Modou",
+     "Waaye dama ko bëgg ! Ma tudde ko Mbèè !",
+     "Mais je l'aime ! Je l'ai appelé Mbèè !"
+    ],
+    [
+     "line",
+     "Awa",
+     "Mbèè ? Ha ha ! Tur bu rafet la !",
+     "Mbèè ? Ha ha ! C'est un joli nom !",
+     {
+      "tts": "[laughs] Mbèè ? Ha ha ! Tur bu rafet la !"
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Mbèè dafa lekk sama pain ak sama biskit !",
+     "Mbèè a mangé mon pain et mes biscuits !"
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Moo tax dafa neex sa xol, kon !",
+     "C'est pour ça qu'il t'aime bien, alors !",
+     {
+      "tts": "[laughs] Moo tax dafa neex sa xol, kon !"
+     }
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Ñëwleen, ñu dem ca Tonton Ablaye. Modou, yow yaay yor buum bi.",
+     "Venez, on va chez Tonton Ablaye. Modou, c'est toi qui tiens la corde."
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     1.2,
+     {
+      "n": 2
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Waaw ! Man laay yor xar bi !",
+     "Oui ! C'est moi qui tiens le mouton !",
+     {
+      "tts": "[proudly] Waaw ! Man laay yor xar bi !"
+     }
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "move",
+     1.6,
+     {
+      "x": -500
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "move",
+     1.6,
+     {
+      "x": -400
+     }
+    ],
+    [
+     "act",
+     "Modou",
+     "move",
+     1.6,
+     {
+      "x": -300
+     }
+    ],
+    [
+     "wait",
+     1.8
+    ]
+   ]
+  },
+  {
+   "bg": "rue",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Baay Ibou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.6
+    ],
+    [
+     "sfx",
+     "a sheep bleats and pulls a rope, then hooves running away on sand",
+     "Mbèèè ! Tak-tak-tak !",
+     2.0
+    ],
+    [
+     "act",
+     "Modou",
+     "shake",
+     1.0
+    ],
+    [
+     "line",
+     "Modou",
+     "Baay ! Xar bi dafa daw ! Buum bi rëcc na !",
+     "Papa ! Le mouton s'enfuit ! La corde a glissé !",
+     {
+      "tts": "[surprised] Baay ! Xar bi dafa daw ! Buum bi rëcc na !"
+     }
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Bul ragal ! Baay Ibou mooy champion bu daw !",
+     "N'aie pas peur ! Baay Ibou est le champion de la course !",
+     {
+      "tts": "[proudly] Bul ragal ! Baay Ibou mooy champion bu daw !"
+     }
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "move",
+     1.4,
+     {
+      "x": 2300
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Modou",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "dance",
+     61
+    ],
+    [
+     "song"
+    ],
+    [
+     "sfx",
+     "cartoon slip on a banana peel and a big thud",
+     "Patatras !",
+     1.6
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "shake",
+     1.4
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Aïe aïe ! Champion bi daanu na…",
+     "Aïe aïe ! Le champion est tombé…",
+     {
+      "tts": "[laughs] Aïe aïe ! Champion bi daanu na..."
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Ha ha ha ! Baay, xar bi moo la raw !",
+     "Ha ha ha ! Papa, le mouton t'a battu !",
+     {
+      "tts": "[laughs] Ha ha ha ! Baay, xar bi moo la raw !"
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Mbèè ! Dellusil ! Ñëwal ci Modou !",
+     "Mbèè ! Reviens ! Viens vers Modou !"
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Xale yi, dimbalileen ma ! Ñu daw ñépp !",
+     "Les enfants, aidez-moi ! Courons tous !"
+    ],
+    [
+     "wait",
+     0.4
+    ]
+   ]
+  },
+  {
+   "bg": "rue",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Baay Ibou",
+    "Mame Ndèye"
+   ],
+   "events": [
+    [
+     "wait",
+     0.5
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Lan ngeen di daw ? Seetal xar bi : mu ngi lekk sama ñax !",
+     "Pourquoi vous courez ? Regardez le mouton : il mange mon herbe !"
+    ],
+    [
+     "sfx",
+     "a calm sheep munching grass, happy bleat",
+     "♪ mbèè ♪",
+     1.4
+    ],
+    [
+     "line",
+     "Modou",
+     "Mame ! Naka nga ko jàppe ?",
+     "Mame ! Comment tu l'as attrapé ?"
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Daw du jàpp xar, sama doom. Ñax mooy jàpp xar !",
+     "Courir n'attrape pas un mouton, mon enfant. C'est l'herbe qui attrape le mouton !"
+    ],
+    [
+     "line",
+     "Awa",
+     "Mame dafa xam lépp !",
+     "Mame sait tout !"
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Waaye… man mooy champion bi, déet ?",
+     "Mais… c'est moi le champion, non ?",
+     {
+      "tts": "[laughs] Waaye... man mooy champion bi, déet ?"
+     }
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Yow mooy champion bu daanu, Ibou !",
+     "Toi, tu es le champion de la chute, Ibou !",
+     {
+      "tts": "[laughs] Yow mooy champion bu daanu, Ibou !"
+     }
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Tonton Ablaye ! Sa xar a ngi ! Jërëjëf, Mame !",
+     "Tonton Ablaye ! Voilà ton mouton ! Merci, Mame !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Ba beneen yoon, Mbèè… dinaa la seetsi !",
+     "Au revoir, Mbèè… je viendrai te voir !",
+     {
+      "tts": "[whispers] Ba beneen yoon, Mbèè... dinaa la seetsi !"
+     }
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     1.0,
+     {
+      "n": 1
+     }
+    ],
+    [
+     "sfx",
+     "all the lights of the street switch off with an electric zap, then silence",
+     "Pfffuit !",
+     1.8
+    ],
+    [
+     "line",
+     "Awa",
+     "Wuy ! Lépp lëndëm na !",
+     "Oh non ! Tout est devenu noir !",
+     {
+      "tts": "[surprised] Wuy ! Lépp lëndëm na !"
+     }
+    ],
+    [
+     "wait",
+     0.3
+    ],
+    [
+     "line",
+     "Narratrice",
+     "Courant bi dem na ! Lan lañuy def ci lëndëm gi ? Dinañu ko gis ci prochain épisode bi !",
+     "Plus d'électricité ! Que vont-ils faire dans le noir ? On le verra dans le prochain épisode !",
+     {
+      "voice": "Narratrice"
+     }
+    ],
+    [
+     "wait",
+     1.6
+    ]
+   ]
+  }
+ ]
+}

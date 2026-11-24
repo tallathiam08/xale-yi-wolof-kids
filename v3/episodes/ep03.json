@@ -1,0 +1,459 @@
+{
+ "id": "ep03",
+ "number": 3,
+ "title": "Le mouton du voisin",
+ "subtitle": "Xar bi dugg na !",
+ "youtube": {
+  "title": "Un mouton dans la maison ! 🐑 Xar bi dugg na ! | Dessin animé en wolof pour enfants | Épisode 3",
+  "description": "Mbèèè ! Un mouton est entré dans la maison d'Awa et Modou ! 🐑 Il mange le cahier d'Awa, il se cache sous le lit… Comment va-t-on l'attraper ?\nXar bi dugg na ci kër gi ! 😂 Lan lañuy def ?\n\n🎵 Nouvelle chanson : « Xar bi, mbèè ! » – chante avec Awa et Modou !\n\n👨‍👩‍👧‍👦 Les personnages : Awa (5 ans), Modou (3 ans), bébé Papa, Yaay Fatou, Baay Ibou, Mame Ndèye et Maîtresse Sokhna.\n\n📺 De nouveaux épisodes chaque semaine : des histoires drôles de la vie de tous les jours et des chansons en wolof.\n👉 Abonne-toi pour ne pas rater la suite !\n\nSous-titres en wolof et en français.\n\n#wolof #dessinanimé #enfants #senegal #chansonenfant",
+  "tags": [
+   "wolof",
+   "dessin animé wolof",
+   "chanson wolof",
+   "chanson enfant wolof",
+   "dessin animé sénégalais",
+   "enfants sénégal",
+   "comptine wolof",
+   "Awa et Modou",
+   "kids wolof",
+   "Senegal cartoon",
+   "Wolof cartoon for kids",
+   "Wolof songs for kids",
+   "apprendre le wolof",
+   "xale yi",
+   "dessin animé africain",
+   "mouton",
+   "xar",
+   "Tabaski",
+   "animaux"
+  ]
+ },
+ "short_youtube": {
+  "title": "Papa moo ko gis ! Le mouton est sous le lit 🐑😂 #wolof #shorts",
+  "description": "Papa moo ko gis ! 😂 Épisode complet sur la chaîne ! #wolof #senegal #enfants"
+ },
+ "thumbnail": {
+  "bg": "maison",
+  "chars": [
+   "Papa",
+   "Modou"
+  ],
+  "text": [
+   "XAR BI",
+   "DUGG NA !"
+  ]
+ },
+ "short": {
+  "scene": 2,
+  "from": 1,
+  "to": 6,
+  "text": [
+   "PAPA MOO KO",
+   "GIS !"
+  ]
+ },
+ "song": {
+  "title": "Xar bi, mbèè !",
+  "seconds": 60,
+  "lyrics": [
+   "Xar bi, xar bi, mbèè, mbèè !",
+   "Mu ngi daw, mu ngi daw ci kër gi !",
+   "Xar bi, xar bi, mbèè, mbèè !",
+   "Ñëwal fii, ñëwal fii, bul daw !",
+   "Mbèè, mbèè, mbèè… ha ha ha !",
+   "Xar bi, xar bi, ñëwal fii !"
+  ]
+ },
+ "outro_bg": "maison",
+ "scenes": [
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Yaay Fatou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.8
+    ],
+    [
+     "sfx",
+     "a sheep bleating loudly behind a door, cartoon style",
+     "♪ Mbèèè ! ♪",
+     2.0
+    ],
+    [
+     "act",
+     "Awa",
+     "hop",
+     0.8,
+     {
+      "n": 1
+     }
+    ],
+    [
+     "act",
+     "Modou",
+     "hop",
+     0.8,
+     {
+      "n": 1
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Yaay ! Dafa am lu nekk ci bunt bi !",
+     "Maman ! Il y a quelque chose devant la porte !",
+     {
+      "tts": "[surprised] Yaay ! Dafa am lu nekk ci bunt bi !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Ubbil bunt bi, Awa. Xoolal kan la.",
+     "Ouvre la porte, Awa. Regarde qui c'est."
+    ],
+    [
+     "sfx",
+     "door creaks open, then quick hooves running on a tiled floor, cartoon",
+     "Tak-tak-tak !",
+     2.0
+    ],
+    [
+     "line",
+     "Modou",
+     "Xar ! Xar bi dugg na ci kër gi !",
+     "Un mouton ! Le mouton est entré dans la maison !",
+     {
+      "tts": "[surprised] Xar ! Xar bi dugg na ci kër gi !"
+     }
+    ],
+    [
+     "act",
+     "Papa",
+     "hop",
+     1.6,
+     {
+      "n": 3
+     }
+    ],
+    [
+     "line",
+     "Papa",
+     "Mbèè… mbèè ! Hi hi !",
+     "Mbèè… mbèè ! Hi hi !",
+     {
+      "tts": "Mbèè... mbèè ! [giggles]"
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Seetal Papa ! Mu ngi woy ak xar bi !",
+     "Regarde Papa ! Il chante avec le mouton !",
+     {
+      "tts": "[laughs] Seetal Papa ! Mu ngi woy ak xar bi !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Jàppleen ko, xale yi ! Bu dem ci cuisine bi !",
+     "Attrapez-le, les enfants ! Qu'il n'aille pas dans la cuisine !"
+    ],
+    [
+     "act",
+     "Modou",
+     "move",
+     1.2,
+     {
+      "x": 1900
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Xar bi, ñëwal fii ! Bul daw !",
+     "Mouton, viens ici ! Ne cours pas !"
+    ],
+    [
+     "line",
+     "Awa",
+     "Modou, bul daw ginnaaw xar bi ! Dangay daanu !",
+     "Modou, ne cours pas derrière le mouton ! Tu vas tomber !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Man dama gaaw ni xar ! Mbèè !",
+     "Moi je suis rapide comme un mouton ! Mbèè !",
+     {
+      "tts": "[laughs] Man dama gaaw ni xar ! Mbèè !"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Ñaari xar ci biir kër gi léegi ? Yàlla na !",
+     "Deux moutons dans la maison maintenant ? Oh là là !",
+     {
+      "tts": "[laughs] Ñaari xar ci biir kër gi léegi ? Yàlla na !"
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Modou",
+     "dance",
+     61
+    ],
+    [
+     "act",
+     "Papa",
+     "dance",
+     61
+    ],
+    [
+     "song"
+    ],
+    [
+     "wait",
+     0.5
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Yaay Fatou",
+    "Baay Ibou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.6
+    ],
+    [
+     "sfx",
+     "a sheep happily munching paper, crunchy cartoon chewing",
+     "Krr-krr-krr…",
+     2.0
+    ],
+    [
+     "line",
+     "Awa",
+     "Wuy ! Xar bi mu ngi lekk sama cahier !",
+     "Oh non ! Le mouton mange mon cahier !",
+     {
+      "tts": "[surprised] Wuy ! Xar bi mu ngi lekk sama cahier !"
+     }
+    ],
+    [
+     "act",
+     "Awa",
+     "shake",
+     1.0
+    ],
+    [
+     "line",
+     "Modou",
+     "Xar bi dafa bëgg jàng ni man !",
+     "Le mouton veut apprendre comme moi !",
+     {
+      "tts": "[giggles] Xar bi dafa bëgg jàng ni man !"
+     }
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Lan mooy xew fii ? Ndax xar bi am na sac itam ?",
+     "Qu'est-ce qui se passe ici ? Le mouton a aussi un cartable ?",
+     {
+      "tts": "[laughs] Lan mooy xew fii ? Ndax xar bi am na sac itam ?"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Baay Ibou, bul ree ! Jàppal ko !",
+     "Baay Ibou, ne rigole pas ! Attrape-le !"
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "move",
+     1.0,
+     {
+      "x": 1500
+     }
+    ],
+    [
+     "sfx",
+     "hooves running away fast, a thud and a cartoon boing",
+     "Boing !",
+     1.6
+    ],
+    [
+     "act",
+     "Baay Ibou",
+     "shake",
+     1.2
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Aïe ! Xar bi dafa gaaw lool !",
+     "Aïe ! Ce mouton est très rapide !"
+    ],
+    [
+     "line",
+     "Awa",
+     "Fan la dem ? Fan la dem ?",
+     "Où est-il allé ? Où est-il allé ?"
+    ],
+    [
+     "line",
+     "Modou",
+     "Xar bi, nga fi nekk ? Xar bi ?",
+     "Mouton, tu es là ? Mouton ?",
+     {
+      "tts": "[whispers] Xar bi, nga fi nekk ? Xar bi ?"
+     }
+    ],
+    [
+     "line",
+     "Yaay Fatou",
+     "Seetleen ci cuisine bi, ci salon bi, fépp !",
+     "Cherchez dans la cuisine, dans le salon, partout !"
+    ],
+    [
+     "wait",
+     0.5
+    ]
+   ]
+  },
+  {
+   "bg": "maison",
+   "cast": [
+    "Awa",
+    "Modou",
+    "Papa",
+    "Mame Ndèye",
+    "Baay Ibou"
+   ],
+   "events": [
+    [
+     "wait",
+     0.6
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Xale yi, noppileen. Déglul…",
+     "Les enfants, chut. Écoutez…",
+     {
+      "tts": "[whispers] Xale yi, noppileen. Déglul..."
+     }
+    ],
+    [
+     "sfx",
+     "a soft sheep bleat from under a bed, muffled",
+     "♪ mbèè… ♪",
+     1.6
+    ],
+    [
+     "act",
+     "Papa",
+     "hop",
+     1.4,
+     {
+      "n": 2
+     }
+    ],
+    [
+     "line",
+     "Papa",
+     "Wa… wa… fii !",
+     "A… a… là !",
+     {
+      "tts": "Wa... wa... fii !"
+     }
+    ],
+    [
+     "line",
+     "Modou",
+     "Papa moo ko gis ! Xar bi mu ngi ci suuf lal bi !",
+     "C'est Papa qui l'a trouvé ! Le mouton est sous le lit !",
+     {
+      "tts": "[surprised] Papa moo ko gis ! Xar bi mu ngi ci suuf lal bi !"
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Bravo Papa !",
+     "Bravo Papa !",
+     {
+      "tts": "[laughs] Bravo Papa !"
+     }
+    ],
+    [
+     "line",
+     "Awa",
+     "Xar bi, génnal ! Amul kenn ku lay lekk !",
+     "Mouton, sors ! Personne ne va te manger !"
+    ],
+    [
+     "line",
+     "Mame Ndèye",
+     "Xar bii, du sunu xar. Kan moo ko moom ?",
+     "Ce mouton, ce n'est pas le nôtre. À qui est-il ?"
+    ],
+    [
+     "line",
+     "Baay Ibou",
+     "Xanaa xaru sunu dëkkandoo Tonton Ablaye la !",
+     "C'est sûrement le mouton de notre voisin, Tonton Ablaye !"
+    ],
+    [
+     "line",
+     "Modou",
+     "Déedéet ! Man laa ! Sama xar la !",
+     "Non ! C'est à moi ! C'est mon mouton !",
+     {
+      "tts": "[proudly] Déedéet ! Man laa ! Sama xar la !"
+     }
+    ],
+    [
+     "wait",
+     0.3
+    ],
+    [
+     "line",
+     "Narratrice",
+     "Ndax dinañu delloo xar bi Tonton Ablaye ? Dinañu ko gis ci prochain épisode bi !",
+     "Est-ce qu'ils vont rendre le mouton à Tonton Ablaye ? On le verra dans le prochain épisode !",
+     {
+      "voice": "Narratrice"
+     }
+    ],
+    [
+     "wait",
+     1.6
+    ]
+   ]
+  }
+ ]
+}
