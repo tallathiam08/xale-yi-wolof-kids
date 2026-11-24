@@ -82,7 +82,9 @@ def main():
     # 2) publier le plus ancien épisode prêt
     built = load(BUILT, {})
     ready = sorted(e for e in built if e not in pub)
-    if yt and ready and os.environ.get("PUBLISH", "1") == "1":
+    import datetime
+    day_ok = os.environ.get("FORCE_PUBLISH") == "1" or datetime.datetime.utcnow().weekday() in (0, 2, 4, 6)  # lun, mer, ven, dim
+    if yt and ready and os.environ.get("PUBLISH", "1") == "1" and day_ok:
         e = ready[0]; b = f"build/{e}"
         fetch(e, b, "episode.mp4", "thumbnail.jpg", "short_01.mp4", "shorts.json")
         sh(sys.executable, "publish.py", f"episodes/{e}.json", b)

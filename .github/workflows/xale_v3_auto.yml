@@ -2,8 +2,9 @@ name: Xale Yi v3 – épisode automatique
 
 on:
   schedule:
-    # 4 épisodes par semaine : lundi, mercredi, vendredi, dimanche à 16h17 (heure de Dakar = UTC), après l'école
-    - cron: "17 16 * * 0,1,3,5"
+    # Tous les jours à 16h17 (Dakar) : fabrique un épisode si la réserve n'est pas pleine (réessaie si Gemini est surchargé).
+    # Publication seulement lundi, mercredi, vendredi, dimanche = 4 épisodes par semaine.
+    - cron: "17 16 * * *"
   workflow_dispatch:
     inputs:
       episode:
@@ -51,6 +52,7 @@ jobs:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           PUBLISH: ${{ github.event.inputs.publish || '1' }}
+          FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
           PUBLISH_PRIVACY: ${{ vars.PUBLISH_PRIVACY || 'public' }}
           GH_TOKEN: ${{ github.token }}
         run: python run.py ${{ github.event.inputs.episode }}

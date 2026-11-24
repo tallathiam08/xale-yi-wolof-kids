@@ -35,24 +35,32 @@ def schema_example():
 
 
 def ask(prompt):
+    """Gemini est parfois surchargé (503) : on alterne les modèles pendant ~30 minutes avant d'abandonner."""
     key = os.environ["GEMINI_API_KEY"]
-    for model in MODELS:
-        for k in range(3):
-            try:
-                r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}",
-                                  json={"contents": [{"parts": [{"text": prompt}]}],
-                                        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.8}},
-                                  timeout=240)
-            except requests.RequestException as e:  # délai dépassé, coupure réseau : on réessaie
-                print(model, "erreur réseau :", repr(e)[:150]); time.sleep(15 * (k + 1)); continue
+    deadline = time.time() + int(os.environ.get("GEMINI_PATIENCE", "1800"))
+    k = 0
+    while time.time() < deadline:
+        model = MODELS[k % len(MODELS)]
+        try:
+            r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}",
+                              json={"contents": [{"parts": [{"text": prompt}]}],
+                                    "generationConfig": {"responseMimeType": "application/json", "temperature": 0.8}},
+                              timeout=240)
             if r.status_code == 200:
                 try:
                     return r.json()["candidates"][0]["content"]["parts"][0]["text"]
                 except Exception:
-                    pass
-            print(model, r.status_code, r.text[:200])
-            time.sleep(15 * (k + 1))
-    raise SystemExit("Gemini indisponible")
+                    print(model, "réponse vide")
+            else:
+                print(model, r.status_code, r.text[:120].replace("\n", " "))
+        except requests.RequestException as e:
+            print(model, "erreur réseau :", repr(e)[:150])
+        k += 1
+        if k % len(MODELS) == 0:  # tous les modèles ont échoué : on attend un peu plus à chaque tour
+            time.sleep(min(60 * (k // len(MODELS)), 240))
+        else:
+            time.sleep(5)
+    raise SystemExit("Gemini indisponible pour le moment (surcharge) – nouvel essai au prochain passage")
 
 
 ACTS = ("hop", "shake", "dance", "walk", "move", "hide", "show", "pop", "flip")
@@ -171,7 +179,7 @@ Balises d'émotion possibles dans "tts" : [laughs], [giggles], [whispers], [surp
 Réponds uniquement avec le JSON."""
     err = ""
     for k in range(6):
-        txt = ask(prompt + (f"\n\nATTENTION, ta réponse précédente était invalide ({err}). Corrige ce point." if err else ""))
+        txt = ask(prompt + (f"\n\nATTENTION, ta réponse précédente était invalide ({err}). Corrige ce point. Rappel : 30 à 40 répliques au total (événements « line »), 3 scènes, une seule chanson." if err else ""))
         txt = re.sub(r"^```(json)?|```$", "", txt.strip()).strip()
         try:
             ep = json.loads(txt)
